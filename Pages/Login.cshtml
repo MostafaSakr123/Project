@@ -1,0 +1,31 @@
+﻿@page
+@model Project.Pages.LoginModel
+@{
+}
+
+<div class="text-center">
+    <h1>Sign in</h1>
+</div>
+
+<form method="post">
+    <label>username:</label>
+    <input type="text" asp-for="@Model.username" /> <br /> 
+    <span asp-validation-for="@Model.username" class="text-danger">  </span><br /><br />
+
+    <label>password:</label>
+    <input type="password" asp-for="@Model.password" /> <br /> 
+    <span asp-validation-for="@Model.password" class="text-danger">  </span><br /><br />
+    
+        
+   <button type="submit" class="btn btn-primary">Login</button> <br /><br /> <br />
+   
+        
+    
+
+
+</form>
+
+<form>
+    <button type="submit" class="btn btn-primary">Register as a visitor</button>
+
+</form>

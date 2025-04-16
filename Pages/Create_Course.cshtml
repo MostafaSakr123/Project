@@ -1,0 +1,34 @@
+﻿@page
+@model Project.Pages.Create_CourseModel
+@{
+}
+
+<div class="text-center">
+    <h1>Create a course</h1>
+</div>
+
+<form method="post">
+    <label>Course name</label>
+    <input type="text" asp-for="@Model.Course_Name" /> <br />
+    <span asp-validation-for="@Model.Course_Name" class="text-danger">  </span><br /><br />
+
+    <label>Course code:</label>
+    <input type="text" asp-for="@Model.Course_Code" /> <br />
+    <span asp-validation-for="@Model.Course_Code" class="text-danger">  </span><br /><br />
+
+    <label>Major:</label>
+    <input type="text" asp-for="@Model.Major" /> <br />
+    <span asp-validation-for="@Model.Major" class="text-danger">  </span><br /><br />
+
+    <label>Professor name:</label>
+    <input type="text" asp-for="@Model.Professor_Name" /> <br />
+    <span asp-validation-for="@Model.Professor_Name" class="text-danger">  </span><br /><br />
+
+
+    <button type="submit" class="btn btn-primary">Create</button> <br /><br /> <br />
+
+
+
+
+
+</form>

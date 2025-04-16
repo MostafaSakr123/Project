@@ -1,0 +1,90 @@
+﻿@page
+@model Project.Pages.DashboardModel
+@{
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 50px;
+        }
+
+        .chart-box {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chart-container">
+        <!-- Pie Chart -->
+        <div class="chart-box">
+            <h3>Number of Courses per Major</h3>
+            <canvas id="pieChart" width="200" height="200"></canvas>
+        </div>
+
+        <!-- Bar Chart -->
+        <div class="chart-box">
+            <h3>Number of Students per Course</h3>
+            <canvas id="barChart" width="300" height="200"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // Pie chart: Number of courses per major
+        new Chart(document.getElementById('pieChart'), {
+            type: 'pie',
+            data: {
+                labels: ['CIE', 'CSE', 'EEE', 'ME'],
+                datasets: [{
+                    data: [4, 6, 3, 2],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+                }]
+            },
+            options: {
+                responsive: false
+            }
+        });
+
+        // Bar chart: Number of students per course
+        new Chart(document.getElementById('barChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Database', 'Data Structures', 'OOP'],
+                datasets: [
+                    {
+                        label: 'Section A',
+                        data: [30, 25, 40],
+                        backgroundColor: '#36A2EB'
+                    },
+                    {
+                        label: 'Section B',
+                        data: [28, 20, 35],
+                        backgroundColor: '#FF6384'
+                    }
+                ]
+            },
+            options: {
+                responsive: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 10 }
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
+
+

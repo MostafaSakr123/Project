@@ -1,0 +1,28 @@
+﻿@page
+@model Project.Pages.Add_StudentModel
+@{
+}
+
+<div class="text-center">
+    <h1>Add a student</h1>
+</div>
+
+<form method="post">
+    <label>Student name:</label>
+    <input type="text" asp-for="@Model.Student_Name" /> <br />
+    <span asp-validation-for="@Model.Student_Name" class="text-danger">  </span><br />
+
+    <label>Student ID</label>
+    <input type="number" asp-for="@Model.Student_ID" /> <br />
+    <span asp-validation-for="@Model.Student_ID" class="text-danger">  </span><br />
+
+   
+
+
+    <button type="submit" class="btn btn-primary">Confirm</button> 
+
+
+
+
+
+</form>

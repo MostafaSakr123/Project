@@ -1,0 +1,39 @@
+﻿@page
+@model Project.Pages.Create_Student_AccountModel
+@{
+}
+
+<div class="text-center">
+    <h1>Create Student Account</h1>
+</div>
+
+<form method="post">
+
+    <label>Name:</label>
+    <input type="text" asp-for="@Model.Name" /> <br />
+    <span asp-validation-for="@Model.Name" class="text-danger">  </span><br /><br />
+
+    <label>ID:</label>
+    <input type="number" asp-for="@Model.ID" /> <br />
+    <span asp-validation-for="@Model.ID" class="text-danger">  </span><br /><br />
+
+    <label>username:</label>
+    <input type="text" asp-for="@Model.username" /> <br />
+    <span asp-validation-for="@Model.username" class="text-danger">  </span><br /><br />
+
+    <label>password:</label>
+    <input type="password" asp-for="@Model.password" /> <br />
+    <span asp-validation-for="@Model.password" class="text-danger">  </span><br /><br />
+
+    <label>Major:</label>
+    <input type="text" asp-for="@Model.Major" /> <br />
+    <span asp-validation-for="@Model.Major" class="text-danger">  </span><br /><br />
+
+
+    <button type="submit" class="btn btn-primary">Confirm</button> <br /><br /> <br />
+
+
+
+
+
+</form>
