@@ -1,0 +1,28 @@
+﻿@page
+@model Project.Pages.Register_as_a_VisitorModel
+@{
+}
+<div class="text-center">
+    <h1>Register as a Visitor</h1>
+</div>
+
+<form method="post">
+    <label>username:</label>
+    <input type="text" asp-for="@Model.username" /> <br /> 
+    <span asp-validation-for="@Model.username" class="text-danger">  </span><br /><br />
+
+    <label>password:</label>
+    <input type="password" asp-for="@Model.password" /> <br /> 
+    <span asp-validation-for="@Model.password" class="text-danger">  </span><br /><br />
+    
+    <label>Major of Interest:</label>
+    <input type="" asp-for="@Model.Major_of_Interest" /> <br />
+    <span asp-validation-for="@Model.Major_of_Interest" class="text-danger">  </span><br /><br />
+        
+   <button type="submit" class="btn btn-primary">Register</button> <br /><br /> <br />
+   
+        
+    
+
+
+</form>

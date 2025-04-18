@@ -1,0 +1,55 @@
+﻿@page
+@model Project.Pages.Available_CoursesModel
+@{
+}
+<div class="container">
+    <h1 class="mb-4">Courses</h1>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Search courses...">
+        </div>
+        <div class="col-md-3">
+            <select class="form-select">
+                <option selected>Filter</option>
+                <option>SPC</option>
+                <option>CIE</option>
+                <option>NANENG</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="list-group">
+        <a class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">CIE 206</h5>
+                <small>3 credits</small>
+            </div>
+            <p class="mb-1">Brief description of CIE 206</p>
+        </a>
+        
+        <a class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">SPC 315</h5>
+                <small>3 credits</small>
+            </div>
+            <p class="mb-1">Brief description of SPC 415</p>
+        </a>
+        
+        <a class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">SPC 101</h5>
+                <small>2 credits</small>
+            </div>
+            <p class="mb-1">Brief description of SPC 101</p>
+        </a>
+        
+        <a class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">REE 302</h5>
+                <small>3 credits</small>
+            </div>
+            <p class="mb-1">Brief description of REE 302</p>
+        </a>
+    </div>
+</div>
