@@ -1,0 +1,116 @@
+﻿@page
+@model Project.Pages.Student_RegistrationModel
+@{
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Course Registration</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 30px;
+                background-color: #f4f4f4;
+            }
+
+            h2, h3 {
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+                color: #2c3e50;
+            }
+
+            nav {
+                background-color: #2d3e50;
+                padding: 10px;
+                margin-bottom: 30px;
+                border-radius: 5px;
+            }
+
+                nav a {
+                    color: #fff;
+                    text-decoration: none;
+                    margin-right: 20px;
+                    font-weight: bold;
+                }
+
+            .container {
+                display: flex;
+                justify-content: space-between;
+                gap: 40px;
+            }
+
+            .form-section {
+                flex: 1;
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .cart-section {
+                width: 300px;
+                background-color: #eaeaea;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            button {
+                padding: 10px 16px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            ul {
+                list-style-type: disc;
+                padding-left: 20px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <h2>Course Registration</h2>
+
+        <nav>
+            <a href="/Register">Registration</a>
+            <a href="/AddDrop">Add/Drop Course</a>
+            <a href="/Timetable">View Timetable</a>
+            <a href="/Tasks">View/Submit Task</a>
+            <a href="/Grades">View Grades</a>
+        </nav>
+
+        <div class="container">
+            <!-- Form Section (Left) -->
+            <div class="form-section">
+                <label>Course Code:</label>
+                <input type="text" placeholder="Enter Course Code" />
+                <br /><br />
+
+                <label>Sections:</label>
+                <br />
+                <input type="checkbox" /> Section 1_Tut<br />
+                <input type="checkbox" /> Section 1_Lecture<br />
+                <input type="checkbox" /> Section 2_Tut<br />
+                <input type="checkbox" /> Section 2_Lecture<br />
+
+                <br />
+                <button>Add to Cart</button>
+            </div>
+
+            <!-- Registration Cart (Right) -->
+            <div class="cart-section">
+                <h3>Registration Cart</h3>
+                <ul>
+                    <li>Course 1 - Section 1</li>
+                    <li>Course 2 - Section 3</li>
+                </ul>
+            </div>
+        </div>
+
+    </body>
+    </html>
+
+
+}
