@@ -1,0 +1,66 @@
+﻿@page
+@model Project.Pages.Student_HomeModel
+@{
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        nav {
+            background-color: #2d3e50;
+            padding: 10px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: bold;
+        }
+
+        .welcome {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 800px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Student Portal, Student Name</h1>
+
+    <nav>
+        <a href="/Register">Registration</a>
+        <a href="/AddDrop">Add/Drop Course</a>
+        <a href="/Timetable">View Timetable</a>
+        <a href="/Tasks">View/Submit Task</a>
+        <a href="/Grades">View Grades</a>
+    </nav>
+
+    <div class="welcome">
+        <p>This portal allows you to register for courses, manage your schedule, view grades, and more.</p>
+    </div>
+</body>
+</html>
+
+
+}
+
+}

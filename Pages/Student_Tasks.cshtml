@@ -1,0 +1,125 @@
+﻿@page
+@model Project.Pages.Student_TasksModel
+@{
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Tasks</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 30px;
+                background-color: #f9f9f9;
+            }
+
+            h2 {
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+                color: #2c3e50;
+            }
+
+            nav {
+                background-color: #2d3e50;
+                padding: 10px;
+                margin-bottom: 30px;
+                border-radius: 5px;
+            }
+
+                nav a {
+                    color: #fff;
+                    text-decoration: none;
+                    margin-right: 20px;
+                    font-weight: bold;
+                }
+
+            .task-box {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                max-width: 800px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+
+            label, textarea {
+                display: block;
+                margin: 10px 0;
+            }
+
+            textarea {
+                width: 100%;
+                height: 100px;
+                border-radius: 4px;
+                border: 1px solid #ccc;
+            }
+
+            .submit-btn, .action-btn {
+                padding: 8px 14px;
+                background-color: #3498db;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-top: 5px;
+            }
+
+            .task-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background-color: #ecf0f1;
+                padding: 10px 15px;
+                margin-top: 10px;
+                border-radius: 5px;
+            }
+
+            .submitted {
+                color: green;
+                font-weight: bold;
+            }
+
+            .icon {
+                font-size: 18px;
+                margin-left: 10px;
+            }
+
+            .task-label {
+                font-size: 16px;
+                color: #2c3e50;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>View / Submit Tasks</h2>
+
+        <nav>
+            <a href="/Register">Registration</a>
+            <a href="/AddDrop">Add/Drop Course</a>
+            <a href="/Timetable">View Timetable</a>
+            <a href="/Tasks">View/Submit Task</a>
+            <a href="/Grades">View Grades</a>
+        </nav>
+
+        <div class="task-box">
+            <label>Submit a Task:</label>
+            <textarea placeholder="Paste your answer or upload a file..."></textarea>
+            <button class="submit-btn">Submit</button>
+
+            <h3 style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Your Tasks</h3>
+
+            <!-- Submitted task -->
+            <div class="task-item">
+                <span class="task-label">Physics Homework 3</span>
+                <span class="submitted">Submitted ✔</span>
+            </div>
+
+            <!-- Not yet submitted task -->
+            <div class="task-item">
+                <span class="task-label">DS Project Proposal</span>
+                <button class="action-btn">Submit</button>
+            </div>
+
+        </div>
+    </body>
+    </html>
+}
+
