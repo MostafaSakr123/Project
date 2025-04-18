@@ -1,0 +1,74 @@
+﻿@page
+@model Project.Pages.Professor_ViewScheduleModel
+@{
+    ViewData["Title"] = "View Schedule";
+}
+
+<div class="card shadow">
+    <div class="card-header bg-primary text-white">
+        <h3><i class="bi bi-calendar-week me-2"></i>Course Schedule</h3>
+    </div>
+    <div class="card-body">
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label class="form-label">Select Course</label>
+                <select class="form-select" asp-for="SelectedCourse"
+                        onchange="this.form.submit()">
+                    <option value="">-- All Courses --</option>
+                    <option value="CIE206">CIE 206</option>
+                    <option value="SPC415">SPC 415</option>
+                    <option value="REE302">REE 302</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Time</th>
+                        <th>Sunday</th>
+                        <th>Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>8:10 - 10:00</td>
+                        <td>@(Model.ShouldDisplay("SPC415") ? "SPC 415" : "")</td>
+                        <td>@(Model.ShouldDisplay("REE302") ? "REE 302" : "")</td>
+                        <td>@(Model.ShouldDisplay("SPC417") ? "SPC 417" : "")</td>
+                        <td>@(Model.ShouldDisplay("CIE206") ? "CIE 206" : "")</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>10:10 - 12:00</td>
+                        <td>@(Model.ShouldDisplay("CIE208") ? "CIE 208" : "")</td>
+                        <td>@(Model.ShouldDisplay("REE310") ? "REE 310" : "")</td>
+                        <td>@(Model.ShouldDisplay("SPC422") ? "SPC 422" : "")</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>12:10 - 2:00</td>
+                        <td></td>
+                        <td>@(Model.ShouldDisplay("CIE327") ? "CIE 327" : "")</td>
+                        <td></td>
+                        <td>@(Model.ShouldDisplay("CIE327") ? "CIE 327" : "")</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>2:10 - 4:00</td>
+                        <td>@(Model.ShouldDisplay("SCH273") ? "SCH 273" : "")</td>
+                        <td></td>
+                        <td>@(Model.ShouldDisplay("SPC432") ? "SPC 432" : "")</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
