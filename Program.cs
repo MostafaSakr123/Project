@@ -1,7 +1,16 @@
+using Project.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddHttpContextAccessor();
+
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
+builder.Services.AddSingleton<DB>();
 
 var app = builder.Build();
 
@@ -18,6 +27,8 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapStaticAssets();
 app.MapRazorPages()
