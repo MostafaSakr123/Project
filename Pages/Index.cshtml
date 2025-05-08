@@ -1,31 +1,9 @@
 ﻿@page
 @model Project.Pages.IndexModel
-@{
-    ViewData["Title"] = "Admin Home Page";
-}
 
 <div class="text-center">
-    @if (HttpContext.Session.GetString("username") != null && HttpContext.Session.GetString("role") == "Admin")
-    {
-        <h1>Welcome Admin, @HttpContext.Session.GetString("username")</h1>
-    }
-    else
-    {
-        <h1>Unauthorized access, please log in.</h1>
-        <p><a href="/Login">Click here to log in</a></p>
-    }
+    <h1>Welcome Admin @Model.DisplayName</h1>
+    <form method="post" class="mt-3">
+        <button type="submit" class="btn btn-danger">Logout</button>
+    </form>
 </div>
-
-<br />
-<br />
-<br />
-
-<div class="text-center">
-    @if (HttpContext.Session.GetString("username") != null)
-    {
-        <form method="post">
-            <button type="submit" class="btn btn-danger">Logout</button>
-        </form>
-    }
-</div>
-
