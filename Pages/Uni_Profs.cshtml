@@ -1,28 +1,20 @@
 ﻿@page
 @model Project.Pages.Uni_ProfsModel
 @{
+    ViewData["Title"] = "Professors";
 }
+
 <div class="container">
-    <div class="list-group">
-        <a class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">Prof. Ahmed El-Taweel</h5>
-            </div>
-            <p class="mb-1">Prof History & role</p>
-        </a>
+    <h1>@ViewData["Title"]</h1>
 
-        <a class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">Prof. Mohannad Draz</h5>
-            </div>
-            <p class="mb-1">Prof History & role</p>
-        </a>
-
-        <a class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">Prof. Ahmed Abd-Elsamea</h5>
-            </div>
-            <p class="mb-1">Prof History & role</p>
-        </a>
+    <div class="professors-list">
+        @foreach (var professor in Model.Professors)
+        {
+            <Button  asp-page="/ProfessorDetails" asp-route-id="@professor.ID"
+               class="professor-card card mb-1 p-4 shadow">
+                <h3>Name: @professor.Name </h3>
+                <span class="major-code">Major Code: @professor.MajorCode</span>
+            </Button>
+        }
     </div>
 </div>
