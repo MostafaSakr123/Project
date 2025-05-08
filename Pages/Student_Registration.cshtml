@@ -1,116 +1,120 @@
 ﻿@page
 @model Project.Pages.Student_RegistrationModel
 @{
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8" />
-        <title>Course Registration</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 30px;
-                background-color: #f4f4f4;
-            }
-
-            h2, h3 {
-                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-                color: #2c3e50;
-            }
-
-            nav {
-                background-color: #2d3e50;
-                padding: 10px;
-                margin-bottom: 30px;
-                border-radius: 5px;
-            }
-
-                nav a {
-                    color: #fff;
-                    text-decoration: none;
-                    margin-right: 20px;
-                    font-weight: bold;
-                }
-
-            .container {
-                display: flex;
-                justify-content: space-between;
-                gap: 40px;
-            }
-
-            .form-section {
-                flex: 1;
-                padding: 20px;
-                background-color: #fff;
-                border-radius: 8px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            }
-
-            .cart-section {
-                width: 300px;
-                background-color: #eaeaea;
-                padding: 20px;
-                border-radius: 8px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            }
-
-            button {
-                padding: 10px 16px;
-                background-color: #007bff;
-                color: white;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-
-            ul {
-                list-style-type: disc;
-                padding-left: 20px;
-            }
-        </style>
-    </head>
-    <body>
-
-        <h2>Course Registration</h2>
-
-        <nav>
-            <a href="/Register">Registration</a>
-            <a href="/AddDrop">Add/Drop Course</a>
-            <a href="/Timetable">View Timetable</a>
-            <a href="/Tasks">View/Submit Task</a>
-            <a href="/Grades">View Grades</a>
-        </nav>
-
-        <div class="container">
-            <!-- Form Section (Left) -->
-            <div class="form-section">
-                <label>Course Code:</label>
-                <input type="text" placeholder="Enter Course Code" />
-                <br /><br />
-
-                <label>Sections:</label>
-                <br />
-                <input type="checkbox" /> Section 1_Tut<br />
-                <input type="checkbox" /> Section 1_Lecture<br />
-                <input type="checkbox" /> Section 2_Tut<br />
-                <input type="checkbox" /> Section 2_Lecture<br />
-
-                <br />
-                <button>Add to Cart</button>
-            </div>
-
-            <!-- Registration Cart (Right) -->
-            <div class="cart-section">
-                <h3>Registration Cart</h3>
-                <ul>
-                    <li>Course 1 - Section 1</li>
-                    <li>Course 2 - Section 3</li>
-                </ul>
-            </div>
-        </div>
-
-    </body>
-    </html>
-
-
+    ViewData["Title"] = "Course Registration";
 }
+
+<h2 style="font-family:sans-serif; color:#2c3e50;">Course Registration</h2>
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div style="background:#e0ffe0; padding:10px; border:1px solid #0a0; margin-bottom:15px;">
+        @Model.Message
+    </div>
+}
+
+<div style="display:flex; gap:30px;">
+
+    <!-- SEARCH & SECTIONS -->
+    <div style="flex:2;">
+        <form method="post" asp-page-handler="Search" style="margin-bottom:15px;">
+            <input asp-for="CourseName" placeholder="e.g. CS101 or Intro"
+                   style="padding:6px; width:200px;" />
+            <button type="submit" style="padding:6px 12px; margin-left:8px;">
+                Search
+            </button>
+        </form>
+
+        @if (Model.HasSearched && !string.IsNullOrWhiteSpace(Model.CourseName))
+        {
+            @if (Model.AvailableSections.Count > 0)
+            {
+                <div style="font-weight:bold; margin-bottom:8px; color:#2c3e50;">
+                    Available Sections for "@Model.CourseName"
+                </div>
+                <table style="width:100%; border-collapse:collapse;">
+                    <thead>
+                        <tr style="background:#f0f0f0;">
+                            <th style="border:1px solid #ccc; padding:6px;">Code</th>
+                            <th style="border:1px solid #ccc; padding:6px;">Sec#</th>
+                            <th style="border:1px solid #ccc; padding:6px;">Day</th>
+                            <th style="border:1px solid #ccc; padding:6px;">Start</th>
+                            <th style="border:1px solid #ccc; padding:6px;">End</th>
+                            <th style="border:1px solid #ccc; padding:6px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sec in Model.AvailableSections)
+                        {
+                            <tr style="background:#f9f9f9;">
+                                <td style="border:1px solid #ccc; padding:6px;">@sec.CourseCode</td>
+                                <td style="border:1px solid #ccc; padding:6px;">@sec.SectionNumber</td>
+                                <td style="border:1px solid #ccc; padding:6px;">@sec.Day</td>
+                                <td style="border:1px solid #ccc; padding:6px;">@sec.StartTime</td>
+                                <td style="border:1px solid #ccc; padding:6px;">@sec.EndTime</td>
+                                <td style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                    <form method="post" asp-page-handler="AddToCart">
+                                        <input type="hidden" name="courseCode" value="@sec.CourseCode" />
+                                        <input type="hidden" name="sectionNumber" value="@sec.SectionNumber" />
+                                        <input type="hidden" name="day" value="@sec.Day" />
+                                        <input type="hidden" name="startTime" value="@sec.StartTime" />
+                                        <input type="hidden" name="endTime" value="@sec.EndTime" />
+                                        <input type="hidden" name="courseName" value="@Model.CourseName" />
+                                        <button type="submit" style="padding:4px 8px;">Add</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div style="color:#a00;">No sections found for "@Model.CourseName".</div>
+            }
+        }
+    </div>
+
+    <!-- CART -->
+    <div style="flex:1; background:#fafafa; padding:12px; border:1px solid #ddd; border-radius:4px;">
+        <h3 style="margin-top:0;">Your Cart</h3>
+        @if (Model.Cart.Count == 0)
+        {
+            <div><em>(empty)</em></div>
+        }
+        else
+        {
+            <table style="width:100%; border-collapse:collapse;">
+                <thead>
+                    <tr style="background:#eee;">
+                        <th style="border:1px solid #ccc; padding:6px;">Code</th>
+                        <th style="border:1px solid #ccc; padding:6px;">Sec#</th>
+                        <th style="border:1px solid #ccc; padding:6px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in Model.Cart)
+                    {
+                        <tr style="background:#fff;">
+                            <td style="border:1px solid #ccc; padding:6px;">@c.CourseCode</td>
+                            <td style="border:1px solid #ccc; padding:6px;">@c.SectionNumber</td>
+                            <td style="border:1px solid #ccc; padding:6px; text-align:center;">
+                                <form method="post" asp-page-handler="RemoveFromCart">
+                                    <input type="hidden" name="courseCode" value="@c.CourseCode" />
+                                    <input type="hidden" name="sectionNumber" value="@c.SectionNumber" />
+                                    <input type="hidden" name="courseName" value="@Model.CourseName" />
+                                    <button type="submit" style="padding:4px 8px;">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <form method="post" asp-page-handler="RegisterCourses" style="margin-top:10px; text-align:center;">
+                <button style="padding:8px 16px; background:#28a745; color:#fff; border:none; border-radius:4px;">
+                    Proceed with Registration
+                </button>
+            </form>
+        }
+    </div>
+
+</div>
