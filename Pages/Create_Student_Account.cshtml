@@ -1,53 +1,39 @@
 ﻿@page
 @model Project.Pages.Create_Student_AccountModel
+@{
+}
 
-<div class="container">
-    <div class="text-center">
-        <h1>Create Student Account</h1>
-    </div>
-
-    @if (!string.IsNullOrEmpty(Model.Message))
-    {
-        <div class="alert @(Model.Message.Contains("success") ? "alert-success" : "alert-danger")">
-            @Model.Message
-        </div>
-    }
-
-    <form method="post" class="mt-4">
-        <div class="form-group">
-            <label asp-for="Name"></label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Username"></label>
-            <input asp-for="Username" class="form-control" />
-            <span asp-validation-for="Username" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Password"></label>
-            <input asp-for="Password" type="password" class="form-control" />
-            <span asp-validation-for="Password" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="StudentId"></label>
-            <input asp-for="StudentId" class="form-control" />
-            <span asp-validation-for="StudentId" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="MajorCode"></label>
-            <input asp-for="MajorCode" class="form-control" />
-            <span asp-validation-for="MajorCode" class="text-danger"></span>
-        </div>
-
-        <button type="submit" class="btn btn-primary mt-3">Create Account</button>
-    </form>
+<div class="text-center">
+    <h1>Create Student Account</h1>
 </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+<form method="post">
+
+    <label>Name:</label>
+    <input type="text" asp-for="@Model.Name" /> <br />
+    <span asp-validation-for="@Model.Name" class="text-danger">  </span><br /><br />
+
+    <label>ID:</label>
+    <input type="number" asp-for="@Model.ID" /> <br />
+    <span asp-validation-for="@Model.ID" class="text-danger">  </span><br /><br />
+
+    <label>username:</label>
+    <input type="text" asp-for="@Model.username" /> <br />
+    <span asp-validation-for="@Model.username" class="text-danger">  </span><br /><br />
+
+    <label>password:</label>
+    <input type="password" asp-for="@Model.password" /> <br />
+    <span asp-validation-for="@Model.password" class="text-danger">  </span><br /><br />
+
+    <label>Major:</label>
+    <input type="text" asp-for="@Model.Major" /> <br />
+    <span asp-validation-for="@Model.Major" class="text-danger">  </span><br /><br />
+
+
+    <button type="submit" class="btn btn-primary">Confirm</button> <br /><br /> <br />
+
+
+
+
+
+</form>

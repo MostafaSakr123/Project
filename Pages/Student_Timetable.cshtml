@@ -1,83 +1,92 @@
 ﻿@page
 @model Project.Pages.Student_TimetableModel
 @{
-    ViewData["Title"] = "View Timetable";
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <title>View Timetable</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 30px;
+                background-color: #f4f4f4;
+            }
+
+            h2 {
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+                color: #2c3e50;
+            }
+
+            nav {
+                background-color: #2d3e50;
+                padding: 10px;
+                margin-bottom: 30px;
+                border-radius: 5px;
+            }
+
+                nav a {
+                    color: #fff;
+                    text-decoration: none;
+                    margin-right: 20px;
+                    font-weight: bold;
+                }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                background-color: #fff;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            th, td {
+                padding: 12px;
+                border: 1px solid #ddd;
+                text-align: center;
+            }
+
+            th {
+                background-color: #007bff;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Weekly Timetable</h2>
+
+        <nav>
+            <a href="/Register">Registration</a>
+            <a href="/AddDrop">Add/Drop Course</a>
+            <a href="/Timetable">View Timetable</a>
+            <a href="/Tasks">View/Submit Task</a>
+            <a href="/Grades">View Grades</a>
+        </nav>
+
+        <table>
+            <tr>
+                <th>Day</th>
+                <th>9–11 AM</th>
+                <th>11–1 PM</th>
+                <th>2–4 PM</th>
+            </tr>
+            <tr>
+                <td>Monday</td>
+                <td>CS101</td>
+                <td>—</td>
+                <td>Math201</td>
+            </tr>
+            <tr>
+                <td>Tuesday</td>
+                <td>—</td>
+                <td>Physics202</td>
+                <td>CS101</td>
+            </tr>
+            <!-- Add more rows as needed -->
+        </table>
+    </body>
+    </html>
+
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>@ViewData["Title"]</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 30px;
-            background-color: #f0f2f5;
-        }
 
-        h2 {
-            color: #2c3e50;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background-color: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        th, td {
-            padding: 14px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
-
-        th {
-            background-color: #007bff;
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-    </style>
-</head>
-<body>
-    <h2>Weekly Timetable</h2>
-
-    @if (Model.Timetable != null && Model.Timetable.Count > 0)
-    {
-        <table>
-            <thead>
-                <tr>
-                    <th>Day</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Course Code</th>
-                    <th>Course Name</th>
-                    <th>Section Number</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var entry in Model.Timetable)
-                {
-                    <tr>
-                        <td>@entry.Day</td>
-                        <td>@entry.StartTime</td>
-                        <td>@entry.EndTime</td>
-                        <td>@entry.CourseCode</td>
-                        <td>@entry.CourseName</td>
-                        <td>@entry.SectionNumber</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p>No timetable data found for your account.</p>
-    }
-</body>
-</html>
+}

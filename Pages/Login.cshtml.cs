@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Project.Models;
-using System.Globalization;
 
 namespace Project.Pages
 {
@@ -21,8 +20,7 @@ namespace Project.Pages
         {
             db = db1;
         }
- 
-         
+
         public IActionResult OnPost()
         {
             if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
@@ -44,27 +42,6 @@ namespace Project.Pages
             HttpContext.Session.SetString("role", userRole.Item1);
             HttpContext.Session.SetString("userId", userRole.Item2);
 
-
-
-          
-
-            // Get the student name and store in the session if the role is 'Student'
-            if (userRole.Item1 == "Student")
-            {
-                var student = db.GetStudentByUsername(Username); // Fetch the student object
-                if (student != null)
-                {
-                    HttpContext.Session.SetString("student_name", student.Name); // Store student name in session
-                    HttpContext.Session.SetInt32("studentId", student.ID);
-                    //for the grades part 
-                    //I did this for the session to store for example "202000123" (not "student_john").
-                    //setin32 (to store 32 bit integers)
-
-                }
-            }
-
-
-
             // Redirect user based on their role
             if (userRole.Item1 == "Admin")
             {
@@ -78,16 +55,8 @@ namespace Project.Pages
             {
                 return RedirectToPage("/Student_Home");
             }
-            
+
             return Page();  // Fallback
-        }
-        public IActionResult OnPostVisitor()
-        {
-            if (string.IsNullOrEmpty(Username) && string.IsNullOrEmpty(Password))
-            {
-                return RedirectToPage("/Register_Visitor");
-            }
-            return Page();
         }
     }
 }

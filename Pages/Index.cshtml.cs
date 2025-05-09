@@ -1,40 +1,42 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 using Project.Models;
 
 namespace Project.Pages
 {
     public class IndexModel : PageModel
     {
-        public string DisplayName { get; set; }
+        private readonly ILogger<IndexModel> _logger;
+        private readonly DB db;
+
+        public string username { get; set; }
+        public string role { get; set; }
+
+        public IndexModel(ILogger<IndexModel> logger, DB db1)
+        {
+            _logger = logger;
+            db = db1;
+        }
 
         public IActionResult OnGet()
         {
-            // Check if admin is logged in
-            if (HttpContext.Session.GetString("role") != "Admin")
+            // Check if the user is logged in and if the role is Admin
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("username")) || HttpContext.Session.GetString("role") != "Admin")
             {
                 return RedirectToPage("/Login");
             }
 
-            // Get username from session
-            var username = HttpContext.Session.GetString("username") ?? "Admin";
-
-            // Extract name after underscore or use full username
-            DisplayName = username.Contains('_')
-                ? username.Split('_')[1]
-                : username;
-
-            // Capitalize first letter
-            if (DisplayName.Length > 0)
-            {
-                DisplayName = char.ToUpper(DisplayName[0]) + DisplayName.Substring(1).ToLower();
-            }
+            // Get user info from session
+            username = HttpContext.Session.GetString("username");
+            role = HttpContext.Session.GetString("role");
 
             return Page();
         }
 
         public IActionResult OnPost()
         {
+            // Log out the user
             HttpContext.Session.Clear();
             return RedirectToPage("/Login");
         }
