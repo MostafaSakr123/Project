@@ -1,0 +1,35 @@
+﻿@page
+@using System.Data
+@model Project.Pages.DraftsModel
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Task Title</th>
+            <th>Course</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var draft in Model.Drafts)
+        {
+            <tr>
+                <td>@draft.TaskTitle</td>
+                <td>@draft.CourseCode</td>
+                <td>
+                    <form method="post">
+                        <input type="hidden" name="taskId" value="@draft.TaskId" />
+                        <button type="submit" asp-page-handler="Publish"
+                                class="btn btn-success btn-sm">
+                            Publish
+                        </button>
+                        <button type="submit" asp-page-handler="Delete"
+                                class="btn btn-danger btn-sm">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

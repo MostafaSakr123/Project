@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Project.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
-using System.Data.SqlClient;
 
 namespace Project.Pages
 {
@@ -32,7 +31,7 @@ namespace Project.Pages
 
         [BindProperty]
         [Required(ErrorMessage = "Semester is required")]
-        public string Semester { get; set; }
+        public string semester { get; set; }
 
         public DataTable ProfessorCourses { get; set; }
         public string CalculatedGrade { get; set; }
@@ -53,52 +52,45 @@ namespace Project.Pages
         {
             if (!ModelState.IsValid)
             {
-                OnGet();
+                OnGet(); // Reload courses
                 return Page();
             }
 
             CalculateGrade();
-            OnGet();
+            OnGet(); // Reload courses while retaining form values
             return Page();
         }
 
         public IActionResult OnPostSubmit()
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) return PageWithError();
+
+            if (!int.TryParse(StudentId, out int studentIdInt))
             {
-                OnGet();
-                return Page();
+                ModelState.AddModelError("StudentId", "Invalid Student ID format");
+                return PageWithError();
             }
 
-            try
+            if (!_db.IsStudentEnrolled(studentIdInt, SelectedCourse, semester))
             {
-                var professorId = HttpContext.Session.GetString("userId");
-
-                // Validate enrollment for semester
-                if (!_db.IsStudentEnrolled(StudentId, SelectedCourse, Semester))
-                {
-                    ModelState.AddModelError("", "Student is not enrolled in this course for selected semester");
-                    OnGet();
-                    return Page();
-                }
-
-                // Calculate grade
-                CalculateGrade();
-
-                // Upsert grade
-                if (_db.UpsertGrade(Semester, StudentId, SelectedCourse, CalculatedGrade))
-                {
-                    TempData["SuccessMessage"] = $"Grade {CalculatedGrade} submitted for {Semester}";
-                    return RedirectToPage();
-                }
-
-                ModelState.AddModelError("", "Failed to save grade. Please try again.");
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", $"Error: {ex.Message}");
+                TempData["ErrorMessage"] = "Student not enrolled in this course";
+                return RedirectToPage();
             }
 
+            CalculateGrade();
+
+            if (_db.UpsertGrade(semester, studentIdInt, SelectedCourse, CalculatedGrade))
+            {
+                TempData["SuccessMessage"] = $"Grade {CalculatedGrade} saved successfully!";
+                return RedirectToPage();
+            }
+
+            ModelState.AddModelError("", "Failed to save grade");
+            return PageWithError();
+        }
+
+        private IActionResult PageWithError()
+        {
             OnGet();
             return Page();
         }
@@ -108,10 +100,14 @@ namespace Project.Pages
             double total = (AssignmentScore * 0.6) + (ExamScore * 0.4);
             CalculatedGrade = total switch
             {
-                >= 90 => "A",
+                >= 95 => "A",
+                >= 90 => "A-",
+                >= 85 => "B+",
                 >= 80 => "B",
-                >= 70 => "C",
-                >= 60 => "D",
+                >= 75 => "B-",
+                >= 65 => "C+",
+                >= 60 => "C",
+                >= 55 => "C-",
                 _ => "F"
             };
         }

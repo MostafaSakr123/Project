@@ -1,0 +1,33 @@
+﻿@page
+@using System.Data
+@model Project.Pages.PublishedTasksModel
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Task Title</th>
+            <th>Course</th>
+            <th>Published Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model.PublishedTasks)
+        {
+            <tr>
+                <td>@task.TaskTitle</td>
+                <td>@task.CourseCode</td>
+                <td>@task.PublishedDate.ToString("g")</td>
+                <td>
+                    <form method="post">
+                        <input type="hidden" name="taskId" value="@task.TaskId" />
+                        <button type="submit" class="btn btn-danger btn-sm"
+                                asp-page-handler="Delete">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

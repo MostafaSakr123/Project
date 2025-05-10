@@ -1,5 +1,7 @@
 ﻿@page
+@using System.Data
 @model Project.Pages.Professor_UploadTaskModel
+
 @{
     ViewData["Title"] = "Upload Task";
 }
@@ -16,32 +18,38 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show mb-4">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
 
-        <form method="post" id="taskForm">
-            <input type="hidden" asp-for="State" />
-
+        <form method="post" class="needs-validation" novalidate>
             <div class="row mb-4">
                 <div class="col-md-6">
-                    <label class="form-label">
-                        Course <span class="text-danger">*</span>
-                    </label>
+                    <label class="form-label">Course <span class="text-danger">*</span></label>
                     <select class="form-select" asp-for="SelectedCourse" required>
                         <option value="">-- Select Course --</option>
-                        <option value="CIE206">CIE 206</option>
-                        <option value="SPC415">SPC 415</option>
+                        @foreach (DataRow row in Model.ProfessorCourses.Rows)
+                        {
+                            <option value="@row["Course_Code"]"
+                                    selected="@(row["Course_Code"].ToString() == Model.SelectedCourse)">
+                                @row["Course_Code"]
+                            </option>
+                        }
                     </select>
                     <span asp-validation-for="SelectedCourse" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">State</label>
-                    <input type="text" class="form-control" value="@Model.State" readonly>
+                    <input type="hidden" asp-for="State" class="form-control" value="@Model.State" readonly>
                 </div>
             </div>
-
+     
             <div class="mb-3">
-                <label class="form-label">
-                    Task Title <span class="text-danger">*</span>
-                </label>
+                <label class="form-label">Task Title <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" asp-for="TaskTitle" required>
                 <span asp-validation-for="TaskTitle" class="text-danger"></span>
             </div>
@@ -53,20 +61,25 @@
 
             <div class="row mb-4">
                 <div class="col-md-6">
-                    <label class="form-label">
-                        Deadline <span class="text-danger">*</span>
-                    </label>
+                    <label class="form-label">Deadline <span class="text-danger">*</span></label>
                     <input type="datetime-local" class="form-control"
-                           asp-for="Deadline" asp-format="{0:yyyy-MM-ddTHH:mm}" required>
+                           asp-for="Deadline"
+                           asp-format="{0:yyyy-MM-ddTHH:mm}" required>
                     <span asp-validation-for="Deadline" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">
-                        Total Grade <span class="text-danger">*</span>
-                    </label>
+                    <label class="form-label">Total Grade <span class="text-danger">*</span></label>
                     <input type="number" class="form-control" asp-for="TotalGrade" min="1" required>
                     <span asp-validation-for="TotalGrade" class="text-danger"></span>
                 </div>
+            </div>
+            <div class="mt-4 d-flex gap-2">
+                <a asp-page="/Drafts" class="btn btn-info">
+                    <i class="bi bi-files me-2"></i>View Drafts (@Model.DraftCount)
+                </a>
+                <a asp-page="/PublishedTasks" class="btn btn-primary">
+                    <i class="bi bi-file-earmark-check me-2"></i>View Published Tasks (@Model.TaskCount)
+                </a>
             </div>
 
             <div class="form-check mb-4">

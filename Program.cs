@@ -1,7 +1,7 @@
 using Project.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.WebHost.UseSetting("detailedErrors", "true"); // Add this
 // Add services to the container.
 builder.Services.AddRazorPages();
 
@@ -12,8 +12,15 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddSingleton<DB>();
 
-var app = builder.Build();
+// Add session services
+builder.Services.AddSession(options =>
+{
+    options.Cookie.IsEssential = true;
+});
 
+var app = builder.Build();
+app.UseSession(); // Must come before UseRouting()
+app.UseRouting();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -22,13 +29,12 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 
-app.UseRouting();
+
 
 app.UseAuthorization();
-
-app.UseSession();
 
 app.MapStaticAssets();
 app.MapRazorPages()

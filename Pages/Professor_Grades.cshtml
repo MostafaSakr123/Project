@@ -26,7 +26,10 @@
                         <option value="">-- Select Course --</option>
                         @foreach (DataRow row in Model.ProfessorCourses.Rows)
                         {
-                            <option value="@row["Course_Code"]">@row["Course_Code"]</option>
+                            <option value="@row["Course_Code"]"
+                                    selected="@(row["Course_Code"].ToString() == Model.SelectedCourse)">
+                                @row["Course_Code"]
+                            </option>
                         }
                     </select>
                     <span asp-validation-for="SelectedCourse" class="text-danger"></span>
@@ -39,6 +42,20 @@
                 </div>
             </div>
 
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <label class="form-label">Semester</label>
+                    <select class="form-select" asp-for="semester" required>
+                        <option value="">-- Select Semester --</option>
+                        <option>Fall 2024</option>
+                        <option>Spring 2024</option>
+                        <option>Fall 2023</option>
+                        <option>Summer 2023</option>
+                    </select>
+                    <span asp-validation-for="semester" class="text-danger"></span>
+                </div>
+            </div>
+           
             <div class="mb-4">
                 <label class="form-label">Grade Components</label>
                 <div class="table-responsive">
@@ -70,6 +87,12 @@
                     </table>
                 </div>
             </div>
+            <!-- Insert after the grade components table -->
+            <div class="mt-4 d-flex gap-2">
+                <a asp-page="/ViewGrades" class="btn btn-primary">
+                    <i class="bi bi-list-check me-2"></i>View Grades
+                </a>
+            </div>
 
             @if (!string.IsNullOrEmpty(Model.CalculatedGrade))
             {
@@ -77,6 +100,15 @@
                     <strong>Calculated Grade:</strong> @Model.CalculatedGrade
                 </div>
             }
+\            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show mb-4">
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+        
 
             <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-secondary" asp-page-handler="Calculate">
@@ -85,19 +117,6 @@
                 <button type="submit" class="btn btn-primary" asp-page-handler="Submit">
                     Submit Grade
                 </button>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label class="form-label">Semester</label>
-                    <select class="form-select" asp-for="Semester" required>
-                        <option value="">-- Select Semester --</option>
-                        <option>Fall 2024</option>
-                        <option>Spring 2024</option>
-                        <option>Fall 2023</option>
-                        <option>Summer 2023</option>
-                    </select>
-                    <span asp-validation-for="Semester" class="text-danger"></span>
-                </div>
             </div>
         </form>
     </div>

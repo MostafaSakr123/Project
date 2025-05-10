@@ -1,0 +1,48 @@
+﻿@page
+@using System.Data
+@model Project.Pages.ViewGradesModel
+@{
+    ViewData["Title"] = "View Grades";
+}
+
+<div class="card shadow">
+    <div class="card-header bg-primary text-white">
+        <h3><i class="bi bi-list-check me-2"></i>Student Grades by Course</h3>
+    </div>
+    <div class="card-body">
+        @if (!Model.GroupedGrades.Any())
+        {
+            <div class="alert alert-info">No grades found.</div>
+        }
+        else
+        {
+            @foreach (var courseGroup in Model.GroupedGrades)
+            {
+                <div class="mb-5">
+                    <h4>Course: @courseGroup.Key</h4>
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Student Name</th>
+                                <th>Semester</th>
+                                <th>Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var grade in courseGroup.Value)
+                            {
+                                <tr>
+                                    <td>@grade.StudentId</td>
+                                    <td>@grade.StudentName</td>
+                                    <td>@grade.Semester</td>
+                                    <td>@grade.LetterGrade</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        }
+    </div>
+</div>
