@@ -6,6 +6,13 @@ namespace Project.Pages
 {
     public class Student_TimetableModel : PageModel
     {
+        private readonly DB db;
+
+
+        public Student_TimetableModel(DB db1)
+        {
+            db = db1;
+        }
         public List<Student_Timetable> Timetable { get; set; }
 
         public IActionResult OnGet()

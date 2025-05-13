@@ -47,8 +47,7 @@
                             <li class="nav-item"><a class="nav-link text-dark" asp-page="/Student_Tasks">Tasks</a></li>
                             <li class="nav-item"><a class="nav-link text-dark" asp-page="/Student_GradeReport">Grades</a></li>
                             <li class="nav-item"><a class="nav-link text-dark" asp-page="/Student_Registration">Registration</a></li>
-                            <li class="nav-item"><a class="nav-link text-dark" asp-page="/Student_Add/Drop">Add/Drop</a></li>
-                            
+                            <li class="nav-item"><a class="nav-link text-dark" asp-page="/Drop">Drop</a></li>
                         }
                         else if (role == "Professor")
                         {
@@ -61,15 +60,19 @@
 
                         @if (!string.IsNullOrEmpty(role))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/Logout">Logout</a>
+                            <li style="padding-top:8px;" class="nav-item">
+                                <form asp-page="/Logout" method="post" class="d-inline">
+                                    <button type="submit" class="nav-link btn btn-link text-dark border-0 p-0" style="cursor: pointer;">Logout</button>
+                                </form>
                             </li>
+
                         }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -88,4 +91,3 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-

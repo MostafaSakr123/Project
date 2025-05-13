@@ -4,62 +4,58 @@
     ViewData["Title"] = "Course Registration";
 }
 
-<h2 style="font-family:sans-serif; color:#2c3e50;">Course Registration</h2>
+<h2>Course Registration</h2>
+
 @if (!string.IsNullOrEmpty(Model.Message))
 {
-    <div style="background:#e0ffe0; padding:10px; border:1px solid #0a0; margin-bottom:15px;">
+    <div style="background:#e0ffe0; padding:10px; margin-bottom:15px;">
         @Model.Message
     </div>
 }
 
 <div style="display:flex; gap:30px;">
-
-    <!-- SEARCH & SECTIONS -->
-    <div style="flex:2;">
-        <form method="post" asp-page-handler="Search" style="margin-bottom:15px;">
-            <input asp-for="CourseName" placeholder="e.g. CS101 or Intro"
-                   style="padding:6px; width:200px;" />
-            <button type="submit" style="padding:6px 12px; margin-left:8px;">
-                Search
-            </button>
+    <!-- SEARCH PANEL -->
+    <div style="flex:2; border:1px solid #ccc; padding:15px; border-radius:4px;">
+        <form method="get">
+            <input asp-for="CourseName"
+                   placeholder="Course name or code"
+                   style="width:70%;"
+                   value="@Model.CourseName" />
+            <button type="submit">Search</button>
         </form>
 
-        @if (Model.HasSearched && !string.IsNullOrWhiteSpace(Model.CourseName))
+        @if (Model.HasSearched)
         {
-            @if (Model.AvailableSections.Count > 0)
+            @if (!string.IsNullOrEmpty(Model.Message))
             {
-                <div style="font-weight:bold; margin-bottom:8px; color:#2c3e50;">
-                    Available Sections for "@Model.CourseName"
-                </div>
-                <table style="width:100%; border-collapse:collapse;">
-                    <thead>
-                        <tr style="background:#f0f0f0;">
-                            <th style="border:1px solid #ccc; padding:6px;">Code</th>
-                            <th style="border:1px solid #ccc; padding:6px;">Sec#</th>
-                            <th style="border:1px solid #ccc; padding:6px;">Day</th>
-                            <th style="border:1px solid #ccc; padding:6px;">Start</th>
-                            <th style="border:1px solid #ccc; padding:6px;">End</th>
-                            <th style="border:1px solid #ccc; padding:6px;"></th>
+                <!-- message shown above -->
+            }
+            else if (Model.AvailableSections.Any())
+            {
+                <table style="width:100%; margin-top:15px; border-collapse:collapse;">
+                    <thead style="background:#f0f0f0;">
+                        <tr>
+                            <th style="border:1px solid #ddd; padding:8px;">Code</th>
+                            <th style="border:1px solid #ddd; padding:8px;">Section</th>
+                            <th style="border:1px solid #ddd; padding:8px;">Day</th>
+                            <th style="border:1px solid #ddd; padding:8px;">Time</th>
+                            <th style="border:1px solid #ddd; padding:8px;"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var sec in Model.AvailableSections)
+                        @foreach (var s in Model.AvailableSections)
                         {
-                            <tr style="background:#f9f9f9;">
-                                <td style="border:1px solid #ccc; padding:6px;">@sec.CourseCode</td>
-                                <td style="border:1px solid #ccc; padding:6px;">@sec.SectionNumber</td>
-                                <td style="border:1px solid #ccc; padding:6px;">@sec.Day</td>
-                                <td style="border:1px solid #ccc; padding:6px;">@sec.StartTime</td>
-                                <td style="border:1px solid #ccc; padding:6px;">@sec.EndTime</td>
-                                <td style="border:1px solid #ccc; padding:6px; text-align:center;">
+                            <tr>
+                                <td style="border:1px solid #ddd; padding:8px;">@s.CourseCode</td>
+                                <td style="border:1px solid #ddd; padding:8px;">@s.SectionNumber</td>
+                                <td style="border:1px solid #ddd; padding:8px;">@s.Day</td>
+                                <td style="border:1px solid #ddd; padding:8px;">@s.StartTime–@s.EndTime</td>
+                                <td style="border:1px solid #ddd; padding:8px; text-align:center;">
                                     <form method="post" asp-page-handler="AddToCart">
-                                        <input type="hidden" name="courseCode" value="@sec.CourseCode" />
-                                        <input type="hidden" name="sectionNumber" value="@sec.SectionNumber" />
-                                        <input type="hidden" name="day" value="@sec.Day" />
-                                        <input type="hidden" name="startTime" value="@sec.StartTime" />
-                                        <input type="hidden" name="endTime" value="@sec.EndTime" />
-                                        <input type="hidden" name="courseName" value="@Model.CourseName" />
-                                        <button type="submit" style="padding:4px 8px;">Add</button>
+                                        <input type="hidden" asp-for="CourseName" />
+                                        <input type="hidden" name="courseCode" value="@s.CourseCode" />
+                                        <input type="hidden" name="sectionNumber" value="@s.SectionNumber" />
+                                        <button type="submit">Select</button>
                                     </form>
                                 </td>
                             </tr>
@@ -69,52 +65,33 @@
             }
             else
             {
-                <div style="color:#a00;">No sections found for "@Model.CourseName".</div>
+                <p style="margin-top:15px;">No sections found for "@Model.CourseName".</p>
             }
         }
     </div>
 
-    <!-- CART -->
-    <div style="flex:1; background:#fafafa; padding:12px; border:1px solid #ddd; border-radius:4px;">
-        <h3 style="margin-top:0;">Your Cart</h3>
-        @if (Model.Cart.Count == 0)
+    <!-- SELECTION & REGISTER PANEL -->
+    <div style="flex:1; border:1px solid #ccc; padding:15px; border-radius:4px;">
+        <h4>Your Selection</h4>
+        @if (Model.Selected == null)
         {
-            <div><em>(empty)</em></div>
+            <p>(none)</p>
         }
         else
         {
-            <table style="width:100%; border-collapse:collapse;">
-                <thead>
-                    <tr style="background:#eee;">
-                        <th style="border:1px solid #ccc; padding:6px;">Code</th>
-                        <th style="border:1px solid #ccc; padding:6px;">Sec#</th>
-                        <th style="border:1px solid #ccc; padding:6px;"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var c in Model.Cart)
-                    {
-                        <tr style="background:#fff;">
-                            <td style="border:1px solid #ccc; padding:6px;">@c.CourseCode</td>
-                            <td style="border:1px solid #ccc; padding:6px;">@c.SectionNumber</td>
-                            <td style="border:1px solid #ccc; padding:6px; text-align:center;">
-                                <form method="post" asp-page-handler="RemoveFromCart">
-                                    <input type="hidden" name="courseCode" value="@c.CourseCode" />
-                                    <input type="hidden" name="sectionNumber" value="@c.SectionNumber" />
-                                    <input type="hidden" name="courseName" value="@Model.CourseName" />
-                                    <button type="submit" style="padding:4px 8px;">Remove</button>
-                                </form>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            <form method="post" asp-page-handler="RegisterCourses" style="margin-top:10px; text-align:center;">
-                <button style="padding:8px 16px; background:#28a745; color:#fff; border:none; border-radius:4px;">
-                    Proceed with Registration
-                </button>
+            <p>
+                <strong>@Model.Selected.CourseCode</strong>
+                Section <strong>@Model.Selected.SectionNumber</strong><br />
+                (@Model.Selected.Day, @Model.Selected.StartTime–@Model.Selected.EndTime)
+            </p>
+            <form method="post" asp-page-handler="RemoveFromCart" style="display:inline;">
+                <input type="hidden" asp-for="CourseName" />
+                <button type="submit">Remove</button>
+            </form>
+            <form method="post" asp-page-handler="Register" style="display:inline; margin-left:10px;">
+                <input type="hidden" asp-for="CourseName" />
+                <button type="submit">Register</button>
             </form>
         }
     </div>
-
 </div>

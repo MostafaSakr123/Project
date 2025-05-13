@@ -11,6 +11,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddSingleton<DB>();
+builder.Services.AddScoped<DB>();
+
 
 var app = builder.Build();
 
