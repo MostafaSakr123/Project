@@ -20,7 +20,7 @@
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">Project</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
+                        aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
@@ -30,7 +30,6 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Login">Login</a>
                             </li>
-                            <li class="nav-item"><a class="nav-link text-dark" asp-page="/Register_Visitor">Register as a Visitor</a></li>
                         }
                         else if (role == "Admin")
                         {
@@ -59,17 +58,7 @@
                             <li class="nav-item"><a class="nav-link text-dark" asp-page="/Professor_Attendance">Attendance</a></li>
                             <li class="nav-item"><a class="nav-link text-dark" asp-page="/Professor_Announcement">Announcement</a></li>
                         }
-                        else if (role == "Visitor")
-                        {
-                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/View_Announcements">View Announcements</a></li>
-                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/View_Majors">View Majors</a></li>
-                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/Available_Courses">Available Courses</a></li>
-                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/Course_Details">Course_Details</a></li>
-                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/Major_Details">Major Details</a></li>
-                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/Uni_Profs">Professors' Profiles</a></li>
-                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/Prof_Info">Professor Information</a></li>
-                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/Poli_Guide">Politics & Guidelines</a></li>
-                        }
+
                         @if (!string.IsNullOrEmpty(role))
                         {
                             <li class="nav-item">
