@@ -40,8 +40,16 @@ namespace Project.Pages
             _db = db;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            // Session check and redirect 
+            var username = HttpContext.Session.GetString("username");
+            var role = HttpContext.Session.GetString("role");
+            if (string.IsNullOrEmpty(username) || role != "Admin")
+            {
+                return RedirectToPage("/Login");
+            }
+            return Page();
         }
 
         public IActionResult OnPost()
@@ -89,11 +97,12 @@ namespace Project.Pages
                     return Page();
                 }
 
+                // Add success message
+                TempData["SuccessMessage"] = $"Course '{Course_Code} - {Course_Name}' created successfully!";
                 return RedirectToPage("/Index");
             }
             catch (SqlException ex)
             {
-                // Handle specific SQL errors
                 ErrorMessage = ex.Number switch
                 {
                     2627 => "This course code already exists.",

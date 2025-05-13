@@ -27,6 +27,13 @@ namespace Project.Pages
 
         public IActionResult OnGet()
         {
+            // Session check and redirect (paste this at start of every OnGet)
+            var username = HttpContext.Session.GetString("username");
+            var role = HttpContext.Session.GetString("role");
+            if (string.IsNullOrEmpty(username) || role != "Admin")
+            {
+                return RedirectToPage("/Login");
+            }
             Section = _db.GetSection(CourseCode, SectionNumber);
             if (Section == null)
             {

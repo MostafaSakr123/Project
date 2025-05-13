@@ -1,90 +1,124 @@
 ﻿@page
 @model Project.Pages.DashboardModel
 @{
+    ViewData["Title"] = "University Dashboard";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Course Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        .chart-container {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            margin-top: 50px;
-        }
+<div class="container mt-4">
+    <h1 class="text-center mb-4">University Dashboard</h1>
 
-        .chart-box {
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="chart-container">
-        <!-- Pie Chart -->
-        <div class="chart-box">
-            <h3>Number of Courses per Major</h3>
-            <canvas id="pieChart" width="200" height="200"></canvas>
+    <div class="row">
+        <!-- Pie Chart Column -->
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title">Courses per Major</h3>
+                </div>
+                <div class="card-body">
+                    <canvas id="coursesPerMajorChart" height="300"></canvas>
+                </div>
+            </div>
         </div>
 
-        <!-- Bar Chart -->
-        <div class="chart-box">
-            <h3>Number of Students per Course</h3>
-            <canvas id="barChart" width="300" height="200"></canvas>
+        <!-- Bar Chart Column -->
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h3 class="card-title">Students per Course</h3>
+                </div>
+                <div class="card-body">
+                    <canvas id="studentsPerCourseChart" height="300"></canvas>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Pie chart: Number of courses per major
-        new Chart(document.getElementById('pieChart'), {
+        // Prepare data for charts
+        const majorData = {
+            labels: @Html.Raw(Json.Serialize(Model.CoursesPerMajor.Keys)),
+            counts: @Html.Raw(Json.Serialize(Model.CoursesPerMajor.Values))
+        };
+
+        const courseData = @Html.Raw(Json.Serialize(Model.StudentsPerCourse));
+
+        // Process course data for bar chart
+        const courseLabels = Object.keys(courseData);
+        const sections = courseLabels.length > 0 ? Object.keys(courseData[courseLabels[0]]) : [];
+        const datasets = sections.map((section, i) => {
+            return {
+                label: section,
+                data: courseLabels.map(course => courseData[course][section] || 0),
+                backgroundColor: getColor(i)
+            };
+        });
+
+        // Initialize Pie Chart
+        new Chart(document.getElementById('coursesPerMajorChart'), {
             type: 'pie',
             data: {
-                labels: ['CIE', 'CSE', 'EEE', 'ME'],
+                labels: majorData.labels,
                 datasets: [{
-                    data: [4, 6, 3, 2],
-                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+                    data: majorData.counts,
+                    backgroundColor: majorData.labels.map((_, i) => getColor(i)),
+                    borderWidth: 1
                 }]
             },
             options: {
-                responsive: false
-            }
-        });
-
-        // Bar chart: Number of students per course
-        new Chart(document.getElementById('barChart'), {
-            type: 'bar',
-            data: {
-                labels: ['Database', 'Data Structures', 'OOP'],
-                datasets: [
-                    {
-                        label: 'Section A',
-                        data: [30, 25, 40],
-                        backgroundColor: '#36A2EB'
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right'
                     },
-                    {
-                        label: 'Section B',
-                        data: [28, 20, 35],
-                        backgroundColor: '#FF6384'
-                    }
-                ]
-            },
-            options: {
-                responsive: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: { stepSize: 10 }
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.raw} courses`;
+                            }
+                        }
                     }
                 }
             }
         });
+
+        // Initialize Bar Chart
+        new Chart(document.getElementById('studentsPerCourseChart'), {
+            type: 'bar',
+            data: {
+                labels: courseLabels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Students'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Courses'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Helper function for consistent colors
+        function getColor(index) {
+            const colors = [
+                '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e',
+                '#e74a3b', '#858796', '#5a5c69', '#3a3b45'
+            ];
+            return colors[index % colors.length];
+        }
     </script>
-
-</body>
-</html>
-
+}
 

@@ -1,27 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Project.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace Project.Pages
 {
-    public class DashboardModel : PageModel
+    public class ListOfProfessorsModel : PageModel
     {
         private readonly DB _db;
+        public DataTable ProfessorsTable { get; set; } = new DataTable();
 
-        public Dictionary<string, int> CoursesPerMajor { get; set; } = new();
-        public Dictionary<string, Dictionary<string, int>> StudentsPerCourse { get; set; } = new();
-
-        public DashboardModel(DB db)
+        public ListOfProfessorsModel(DB db)
         {
             _db = db;
-        }
-
-        public async Task OnGetAsync()
-        {
-            CoursesPerMajor = await _db.GetCourseCountByMajor();
-            StudentsPerCourse = await _db.GetStudentCountByCourse();
         }
 
         public IActionResult OnGet()
@@ -33,6 +25,8 @@ namespace Project.Pages
             {
                 return RedirectToPage("/Login");
             }
+         
+        ProfessorsTable = _db.GetTableData("Professor");
             return Page();
         }
     }

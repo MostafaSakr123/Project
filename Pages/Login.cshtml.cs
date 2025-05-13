@@ -21,6 +21,28 @@ namespace Project.Pages
             db = db1;
         }
 
+        public IActionResult OnGet()
+        {
+            // Check if user is already logged in
+            var username = HttpContext.Session.GetString("username");
+            var role = HttpContext.Session.GetString("role");
+
+            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(role))
+            {
+                // Redirect based on role
+                return role switch
+                {
+                    "Admin" => RedirectToPage("/Index"),
+                    "Professor" => RedirectToPage("/Professor_HomePage"),
+                    "Student" => RedirectToPage("/Student_Home"),
+                    _ => Page()
+                };
+            }
+
+            // No active session, show login page
+            return Page();
+        }
+
         public IActionResult OnPost()
         {
             if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
@@ -32,7 +54,6 @@ namespace Project.Pages
             var userRole = db.GetUserRole(Username, Password);
             if (userRole.Item1 == "Invalid")
             {
-                // Invalid credentials, show error message
                 LoginErrorMessage = "Invalid username or password.";
                 return Page();
             }
@@ -42,21 +63,14 @@ namespace Project.Pages
             HttpContext.Session.SetString("role", userRole.Item1);
             HttpContext.Session.SetString("userId", userRole.Item2);
 
-            // Redirect user based on their role
-            if (userRole.Item1 == "Admin")
+            // Redirect based on role
+            return userRole.Item1 switch
             {
-                return RedirectToPage("/Index");
-            }
-            else if (userRole.Item1 == "Professor")
-            {
-                return RedirectToPage("/Professor_HomePage");
-            }
-            else if (userRole.Item1 == "Student")
-            {
-                return RedirectToPage("/Student_Home");
-            }
-
-            return Page();  // Fallback
+                "Admin" => RedirectToPage("/Index"),
+                "Professor" => RedirectToPage("/Professor_HomePage"),
+                "Student" => RedirectToPage("/Student_Home"),
+                _ => Page()
+            };
         }
     }
 }

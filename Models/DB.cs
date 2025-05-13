@@ -1,6 +1,7 @@
 ﻿using System.Data.SqlClient;
 using System.Data;
 using Project.Pages;
+using Dapper;
 
 namespace Project.Models
 {
@@ -644,6 +645,174 @@ namespace Project.Models
             }
         }
 
+        // Get course count by major (for pie chart)
+        public async Task<Dictionary<string, int>> GetCourseCountByMajor()
+        {
+            try
+            {
+                if (con.State != ConnectionState.Open)
+                    await con.OpenAsync();
+
+                var result = await con.QueryAsync(
+                    @"SELECT m.Major_Code, COUNT(c.Course_Code) as Count 
+                FROM Major m
+                LEFT JOIN Courses c ON m.Major_Code = c.Major_Code
+                GROUP BY m.Major_Code");
+
+                var dict = new Dictionary<string, int>();
+                foreach (dynamic row in result)
+                {
+                    dict.Add(row.Major_Code, row.Count);
+                }
+                return dict;
+            }
+            finally
+            {
+                // Keep connection open for potential reuse
+            }
+        }
+
+        // Get student count by course (for bar chart)
+        public async Task<Dictionary<string, Dictionary<string, int>>> GetStudentCountByCourse()
+        {
+            try
+            {
+                if (con.State != ConnectionState.Open)
+                    await con.OpenAsync();
+
+                var result = await con.QueryAsync(
+                    @"SELECT 
+                    c.Course_Name,
+                    'Section ' + CAST(s.Section_Number AS VARCHAR) AS Section,
+                    COUNT(e.Student_ID) AS Count
+                FROM Courses c
+                JOIN Sections s ON c.Course_Code = s.Course_Code
+                LEFT JOIN Enrolled_In e ON s.Course_Code = e.Course_Code AND s.Section_Number = e.Section_Number
+                GROUP BY c.Course_Name, s.Section_Number");
+
+                var courseDict = new Dictionary<string, Dictionary<string, int>>();
+                foreach (dynamic row in result)
+                {
+                    if (!courseDict.ContainsKey(row.Course_Name))
+                    {
+                        courseDict[row.Course_Name] = new Dictionary<string, int>();
+                    }
+                    courseDict[row.Course_Name][row.Section] = row.Count;
+                }
+                return courseDict;
+            }
+            finally
+            {
+                // Keep connection open for potential reuse
+            }
+        }
+
+        // Get total student count
+        public async Task<int> GetTotalStudents()
+        {
+            try
+            {
+                if (con.State != ConnectionState.Open)
+                    await con.OpenAsync();
+
+                return await con.ExecuteScalarAsync<int>("SELECT COUNT(*) FROM Student");
+            }
+            finally
+            {
+                // Keep connection open for potential reuse
+            }
+        }
+
+        // Get total course count
+        public async Task<int> GetTotalCourses()
+        {
+            try
+            {
+                if (con.State != ConnectionState.Open)
+                    await con.OpenAsync();
+
+                return await con.ExecuteScalarAsync<int>("SELECT COUNT(*) FROM Courses");
+            }
+            finally
+            {
+                // Keep connection open for potential reuse
+            }
+        }
+
+        // Get major names for display
+        public async Task<List<(string Code, string Name)>> GetMajorNames()
+        {
+            try
+            {
+                if (con.State != ConnectionState.Open)
+                    await con.OpenAsync();
+
+                var result = await con.QueryAsync<(string, string)>(
+                    "SELECT Major_Code, Major_Name FROM Major");
+
+                return result.AsList();
+            }
+            finally
+            {
+                // Keep connection open for potential reuse
+            }
+        }
+
+        public bool IsStudentEnrolled(int studentId, string courseCode, int sectionNumber)
+        {
+            try
+            {
+                if (con.State != ConnectionState.Open)
+                    con.Open();
+
+                var sql = @"SELECT COUNT(*) FROM Enrolled_In 
+                   WHERE Student_ID = @StudentId 
+                   AND Course_Code = @CourseCode
+                   AND Section_Number = @SectionNumber";
+
+                int count = con.ExecuteScalar<int>(sql, new
+                {
+                    StudentId = studentId,
+                    CourseCode = courseCode,
+                    SectionNumber = sectionNumber
+                });
+
+                return count > 0;
+            }
+            finally
+            {
+                // Keep connection open if using singleton
+            }
+        }
+
+        public DataTable GetTableData(string tableName)
+        {
+            DataTable table = new DataTable();
+
+            try
+            {
+                if (con.State != ConnectionState.Open)
+                    con.Open();
+
+                using (var cmd = new SqlCommand($"SELECT * FROM {tableName}", con))
+                using (var reader = cmd.ExecuteReader())
+                {
+                    table.Load(reader);
+                }
+                return table;
+            }
+            catch (Exception ex)
+            {
+                // You might want to log this error
+                Console.WriteLine($"Error loading {tableName}: {ex.Message}");
+                return table;  // Returns empty table on error
+            }
+            finally
+            {
+                // Keep connection open if using singleton
+                // Or close it if using per-request: con.Close();
+            }
+        }
 
 
     }
