@@ -1,5 +1,6 @@
 ﻿@page
-@model Project.Pages.Professor_AttendanceModel  
+@using System.Data
+@model Project.Pages.Professor_AttendanceModel
 @{
     ViewData["Title"] = "Attendance Tracker";
 }
@@ -16,6 +17,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
 
         <form method="post">
             <div class="row mb-4">
@@ -23,55 +31,159 @@
                     <label class="form-label fw-bold">Course</label>
                     <select class="form-select" asp-for="SelectedCourse" required>
                         <option value="">-- Select Course --</option>
-                        <option value="CIE206">CIE 206</option>
-                        <option value="SPC415">SPC 415</option>
+                        @foreach (DataRow row in Model.ProfessorCourses.Rows)
+                        {
+                            <option value="@row["Course_Code"]"
+                                    selected="@(row["Course_Code"].ToString() == Model.SelectedCourse)">
+                                @row["Course_Code"]
+                            </option>
+                        }
                     </select>
-                    <span asp-validation-for="SelectedCourse" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Session Date</label>
-                    <input type="date" class="form-control" asp-for="AttendanceDate" required>
-                    <span asp-validation-for="AttendanceDate" class="text-danger"></span>
+                    <input type="date" class="form-control"
+                           asp-for="AttendanceDate"
+                           value="@Model.AttendanceDate.ToString("yyyy-MM-dd")"
+                           max="@DateTime.Now.ToString("yyyy-MM-dd")" required>
                 </div>
             </div>
 
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered">
                     <thead class="table-light">
                         <tr>
-                            <th width="60%">Student ID</th>
-                            <th width="40%">Status</th>
+                            <th>Student ID</th>
+                            <th>Status</th>
+                            <th></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @for (int i = 0; i < Model.Attendances.Count; i++)
-                        {
-                            <tr>
-                                <td>
-                                    <input type="text" class="form-control" 
-                                           asp-for="Attendances[i].StudentId" required>
-                                    <span asp-validation-for="Attendances[i].StudentId" class="text-danger"></span>
-                                </td>
-                                <td class="text-center">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" 
-                                               asp-for="Attendances[i].IsPresent">
-                                        <label class="form-check-label">
-                                            @(Model.Attendances[i].IsPresent ? "Present" : "Absent")
-                                        </label>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
+                    <tbody id="attendanceRows">
+                        <!-- In the initial row -->
+                        <tr class="attendance-row">
+                            <td>
+                                <input type="text" class="form-control student-id"
+                                       name="Attendances[0].StudentId"
+                                       required>
+                                <span class="text-danger" data-valmsg-for="Attendances[0].StudentId"></span>
+                            </td>
+                            <td class="text-center">
+                                <div class="form-check form-switch">
+                                    <input type="hidden" name="Attendances[0].IsPresent" value="false" />
+                                    <input class="form-check-input presence-toggle" type="checkbox"
+                                           name="Attendances[0].IsPresent" value="true" checked>
+                                    <label class="form-check-label">Present</label>
+                                </div>
+                            </td>
+                            <td>
+                                <!-- No delete button for the first row -->
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
+            <button type="button" id="addRow" class="btn btn-secondary mb-3">
+                <i class="bi bi-plus-circle me-2"></i>Add Row
+            </button>
+
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                <button type="submit" class="btn btn-primary px-4">
+                <a asp-page="/ViewAttendance"
+                   asp-route-course="@Model.SelectedCourse"
+                   class="btn btn-info">
+                    <i class="bi bi-clock-history me-2"></i>View Records
+                </a>
+                <button type="submit" class="btn btn-primary px-4" asp-page-handler="SaveAttendance">
                     <i class="bi bi-save me-2"></i>Save Attendance
                 </button>
             </div>
+      
         </form>
     </div>
 </div>
+
+<!-- Keep existing scripts -->
+@section Scripts {
+    <script>
+        // Ensure only one event listener is attached
+        if (!window.addRowListenerAdded) {
+            document.getElementById('addRow').addEventListener('click', addRow);
+            window.addRowListenerAdded = true;
+        }
+
+        // Add Row Functionality
+        function addRow() {
+            const rows = document.querySelectorAll('.attendance-row');
+            const newIndex = rows.length;
+
+                    const newRow = `
+            <tr class="attendance-row">
+                <td>
+                    <input type="text" class="form-control student-id"
+                           name="Attendances[${newIndex}].StudentId">
+                    <span class="text-danger" data-valmsg-for="Attendances[${newIndex}].StudentId"></span>
+                </td>
+                <td class="text-center">
+                    <div class="form-check form-switch">
+                        <input type="hidden" name="Attendances[${newIndex}].IsPresent" value="false" />
+                        <input class="form-check-input presence-toggle" type="checkbox"
+                               name="Attendances[${newIndex}].IsPresent" value="true" checked>
+                        <label class="form-check-label" id="statusLabel-${newIndex}">Present</label>
+                    </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm remove-row">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+
+            document.getElementById('attendanceRows').insertAdjacentHTML('beforeend', newRow);
+        }
+
+        // Remove Row and Reindex
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-row')) {
+                const row = e.target.closest('.attendance-row');
+                if (document.querySelectorAll('.attendance-row').length > 1) {
+                    row.remove();
+                    reindexRows();
+                }
+            }
+        });
+
+        // Update Status Labels on Toggle
+        document.addEventListener('change', function(e) {
+            if (e.target.classList.contains('presence-toggle')) {
+                const index = e.target.dataset.index;
+                const label = document.getElementById(`statusLabel-${index}`);
+                label.textContent = e.target.checked ? 'Present' : 'Absent';
+            }
+        });
+
+                function reindexRows() {
+            const rows = document.querySelectorAll('.attendance-row');
+            rows.forEach((row, index) => {
+                // Update student ID input
+                row.querySelector('.student-id').name = `Attendances[${index}].StudentId`;
+
+                // Update hidden input and checkbox
+                const hiddenInput = row.querySelector('input[type="hidden"]');
+                const checkbox = row.querySelector('.presence-toggle');
+                if (hiddenInput) {
+                    hiddenInput.name = `Attendances[${index}].IsPresent`;
+                }
+                if (checkbox) {
+                    checkbox.name = `Attendances[${index}].IsPresent`;
+                    checkbox.dataset.index = index;
+                }
+
+                // Update label
+                const label = row.querySelector('.form-check-label');
+                label.id = `statusLabel-${index}`;
+                label.textContent = checkbox.checked ? 'Present' : 'Absent';
+            });
+        }
+    </script>
+}

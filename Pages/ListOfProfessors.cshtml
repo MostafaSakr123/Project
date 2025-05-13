@@ -1,0 +1,39 @@
+﻿@page
+@using System.Data
+@model Project.Pages.ListOfProfessorsModel
+@{
+    ViewData["Title"] = "Professors List";
+}
+
+<div class="container mt-3">
+    <h2>@ViewData["Title"]</h2>
+
+    @if (Model.ProfessorsTable.Rows.Count > 0)
+    {
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    @foreach (DataColumn col in Model.ProfessorsTable.Columns)
+                    {
+                        <th>@col.ColumnName</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (DataRow row in Model.ProfessorsTable.Rows)
+                {
+                    <tr>
+                        @foreach (var item in row.ItemArray)
+                        {
+                            <td>@item.ToString()</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-warning">No professors found in the database.</div>
+    }
+</div>

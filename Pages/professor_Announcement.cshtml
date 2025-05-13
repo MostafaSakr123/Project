@@ -12,18 +12,21 @@
 </div>
 
 <div class="card-body">
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            @TempData["SuccessMessage"]
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"] (@DateTime.Now.ToString("g"))
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
-        <!-- Auto-refresh the page after 3 seconds to clear TempData -->
-        <meta http-equiv="refresh" content="3;url=@Url.Page("Professor_Announcements")" />
-    }
+           // !--Auto - refresh the page after 3 seconds to clear TempData -->
+
+        }
+
+        
+    
      <form method="post">
         <div class="form-group">
             <label>Announcement Title:</label>
@@ -37,6 +40,11 @@
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
 
+        <br />
         <button type="submit" class="btn btn-primary">Post</button>
+            <!-- Add this near the existing buttons -->
+            <a asp-page="/ViewAnnouncements" class="btn btn-info">
+                <i class="bi bi-megaphone me-2"></i>View All Announcements
+            </a>
     </form>
 </div>

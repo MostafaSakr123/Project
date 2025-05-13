@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Project.Models;
+using System.Globalization;
+
 
 namespace Project.Pages
 {
@@ -10,8 +12,8 @@ namespace Project.Pages
 
         [BindProperty]
         public string Username { get; set; }
-
         [BindProperty]
+
         public string Password { get; set; }
 
         public string LoginErrorMessage { get; set; }
@@ -20,7 +22,8 @@ namespace Project.Pages
         {
             db = db1;
         }
-
+ 
+         
         public IActionResult OnPost()
         {
             if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
@@ -41,7 +44,6 @@ namespace Project.Pages
             HttpContext.Session.SetString("username", Username);
             HttpContext.Session.SetString("role", userRole.Item1);
             HttpContext.Session.SetString("userId", userRole.Item2);
-
             // Redirect user based on their role
             if (userRole.Item1 == "Admin")
             {
@@ -55,8 +57,21 @@ namespace Project.Pages
             {
                 return RedirectToPage("/Student_Home");
             }
+            else if (userRole.Item1 == "Visitor")
+            {
+                return RedirectToPage("/View_Announcements");
+
+            }
 
             return Page();  // Fallback
+        }
+        public IActionResult OnPostVisitor()
+        {
+            if (string.IsNullOrEmpty(Username) && string.IsNullOrEmpty(Password))
+            {
+                return RedirectToPage("/Register_Visitor");
+            }
+            return Page();
         }
     }
 }

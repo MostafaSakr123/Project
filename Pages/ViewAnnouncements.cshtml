@@ -1,0 +1,56 @@
+﻿@page
+@model Project.Pages.ViewAnnouncementsModel
+@{
+    ViewData["Title"] = "Announcements";
+}
+
+<div class="card shadow mt-4">
+    <div class="card-header bg-primary text-white">
+        <h3><i class="bi bi-megaphone me-2"></i>Announcements</h3>
+    </div>
+    <div class="card-body">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        @if (Model.Announcements.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var announcement in Model.Announcements.OrderByDescending(a => a.Date))
+                    {
+                        <tr>
+                            <td>@announcement.Date.ToString("g")</td>
+                            <td>@announcement.Title</td>
+                            <td>@announcement.Description</td>
+                            <td>
+                                <form method="post" asp-page-handler="Delete">
+                                    <input type="hidden" name="announcementId" value="@announcement.AnnouncementID" />
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert alert-info">No announcements found</div>
+        }
+    </div>
+</div>

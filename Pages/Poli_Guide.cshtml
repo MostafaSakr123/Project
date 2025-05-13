@@ -1,30 +1,122 @@
 ﻿@page
 @model Project.Pages.Poli_GuideModel
+
 @{
+    ViewData["Title"] = "University Policies & Guidelines";
 }
-<div class="container">
-    <div class="card">
-        <div class="card-header">
-            <h1>Politics & Guidelines</h1>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary mb-3">
+            <i class="bi bi-journal-bookmark-fill"></i> University Policies
+        </h1>
+        <p class="lead text-muted">Our Commitment to Excellence and Ethics</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-primary">
+                <div class="card-header bg-primary bg-opacity-10 d-flex align-items-center">
+                    <i class="bi bi-shield-check fs-3 text-primary me-3"></i>
+                    <h3 class="mb-0">Academic Integrity</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        Honesty in research, coursework, and examinations is mandatory. 
+                        <span class="badge bg-danger">ZERO TOLERANCE</span> for plagiarism, 
+                        cheating, or academic misconduct.
+                    </p>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <p class="mb-4">
-                The University is committed to fostering an inclusive, ethical, and academically rigorous environment. All members of our community—students, faculty, and staff—are expected to adhere to the following principles:
 
-                Academic Integrity: Honesty in research, coursework, and examinations is mandatory. Plagiarism, cheating, or any form of academic misconduct will result in disciplinary action.
-
-                Diversity & Inclusion: We uphold equal opportunities for all, regardless of race, gender, religion, or background. Discrimination or harassment is strictly prohibited.
-
-                Respectful Conduct: Professional and respectful behavior is required in classrooms, offices, and campus spaces. Disruptive or harmful actions will not be tolerated.
-
-                Compliance with Laws: The university adheres to local, national, and international laws, including data protection (e.g., GDPR) and health/safety regulations.
-
-                Freedom of Expression: While encouraging open dialogue, speech must align with principles of mutual respect and institutional values.
-
-                Sustainability: Campus operations prioritize environmental responsibility, including waste reduction and energy conservation.
-
-                Violations of these policies may lead to sanctions, including probation, suspension, or expulsion. For full details, refer to the [University Code of Conduct] or contact the Office of Student Affairs.
-            </p>
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-success">
+                <div class="card-header bg-success bg-opacity-10 d-flex align-items-center">
+                    <i class="bi bi-people-fill fs-3 text-success me-3"></i>
+                    <h3 class="mb-0">Diversity & Inclusion</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        Equal opportunities regardless of race, gender, religion, or background. 
+                        <span class="text-danger">Strict prohibition</span> of discrimination 
+                        or harassment.
+                    </p>
+                </div>
+            </div>
         </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-warning">
+                <div class="card-header bg-warning bg-opacity-10 d-flex align-items-center">
+                    <i class="bi bi-hand-thumbs-up fs-3 text-warning me-3"></i>
+                    <h3 class="mb-0">Respectful Conduct</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        Professional behavior required in all campus spaces. 
+                        <span class="text-danger">No tolerance</span> for disruptive 
+                        or harmful actions.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-info">
+                <div class="card-header bg-info bg-opacity-10 d-flex align-items-center">
+                    <i class="bi bi-balance fs-3 text-info me-3"></i>
+                    <h3 class="mb-0">Legal Compliance</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        Adherence to local/international laws including GDPR and 
+                        health/safety regulations.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-danger">
+                <div class="card-header bg-danger bg-opacity-10 d-flex align-items-center">
+                    <i class="bi bi-megaphone fs-3 text-danger me-3"></i>
+                    <h3 class="mb-0">Free Expression</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        Encouraged open dialogue within bounds of mutual respect 
+                        and institutional values.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-success">
+                <div class="card-header bg-success bg-opacity-10 d-flex align-items-center">
+                    <i class="bi bi-tree-fill fs-3 text-success me-3"></i>
+                    <h3 class="mb-0">Sustainability</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        Environmental responsibility through waste reduction 
+                        and energy conservation initiatives.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="alert alert-danger mt-5 shadow-sm">
+        <h3 class="alert-heading">
+            <i class="bi bi-exclamation-octagon-fill"></i> Policy Violations
+        </h3>
+        <hr>
+        <p class="mb-0">
+            Violations may result in sanctions including probation, suspension, 
+            or expulsion. Consult the <a href="#" class="alert-link">University Code of Conduct</a> 
+            or contact Student Affairs.
+        </p>
     </div>
 </div>

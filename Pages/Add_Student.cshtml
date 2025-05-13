@@ -4,25 +4,24 @@
 }
 
 <div class="text-center">
-    <h1>Add a student</h1>
+    <h1>Add Student to Section</h1>
+    <p><strong>Course Code:</strong> @Model.CourseCode</p>
+    <p><strong>Section Number:</strong> @Model.SectionNumber</p>
 </div>
 
+@if (!ViewData.ModelState.IsValid && ViewData.ModelState[string.Empty]?.Errors.Count > 0)
+{
+    <div class="alert alert-danger">
+        @ViewData.ModelState[string.Empty]?.Errors.First().ErrorMessage
+    </div>
+}
+
 <form method="post">
-    <label>Student name:</label>
-    <input type="text" asp-for="@Model.Student_Name" /> <br />
-    <span asp-validation-for="@Model.Student_Name" class="text-danger">  </span><br />
+    <div class="form-group">
+        <label asp-for="Student_ID">Student ID</label>
+        <input type="number" asp-for="Student_ID" class="form-control" />
+        <span asp-validation-for="Student_ID" class="text-danger"></span>
+    </div>
 
-    <label>Student ID</label>
-    <input type="number" asp-for="@Model.Student_ID" /> <br />
-    <span asp-validation-for="@Model.Student_ID" class="text-danger">  </span><br />
-
-   
-
-
-    <button type="submit" class="btn btn-primary">Confirm</button> 
-
-
-
-
-
+    <button type="submit" class="btn btn-primary">Confirm</button>
 </form>

@@ -1,39 +1,90 @@
 ﻿@page
+@using System.Data
 @model Project.Pages.Prof_InfoModel
 @{
+    ViewData["Title"] = "Professor Details";
 }
-div class="container">
-<div class="card">
-    <div class="card-header">
-        <h1>Prof. Mohannad draz</h1>
-    </div>
-    <div class="card-body">
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <h5>Major:</h5>
-                <p>SPC</p>
-            </div>
-            <div class="col-md-6">
-                <img src="dr mohannad.jpg" class="img-fluid">
-            </div>
-        </div>
-
-        <h5>Background:</h5>
-        <p class="mb-4">Assistant Professor in the Aerospace Engineering program at Zewail City of Science & Technology</p>
-    </div>
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-header">
-                <h4>Assigned Courses</h4>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<div class="container mt-4">
+    <!-- Professor Information Card -->
+    @if (Model.CurrentProfessor != null)
+    {
+        <div class="card shadow-lg mb-4 border-0">
+            <div class="card-header bg-gradient-primary text-primary py-4">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-chalkboard-teacher fa-2x me-2"></i>
+                    <div>
+                        <h1 class="display-5 mb-0"><i class="bi bi-briefcase"></i> @Model.CurrentProfessor.Name</h1>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
-                <ur class="list-group">
-                    <li class="list-group-item">SPC 302</li>
-                    <li class="list-group-item">SPC 211</li>
-                    <li class="list-group-item">SPC 422</li>
-                </ur>
+                <div class="row g-3">
+                    <div class="col text-center border-end">
+                        <div class="text-muted small">PROFESSOR ID</div>
+                        <div class="h2 text-primary">@Model.CurrentProfessor.ID</div>
+                    </div>
+                    <div class="col text-center border-end">
+                        <div class="text-muted small">MAJOR CODE</div>
+                        <div class="h2 text-success">@Model.CurrentProfessor.MajorCode</div>
+                    </div>
+                </div>
             </div>
         </div>
+    }
+    else
+    {
+        <div class="alert alert-danger">Professor not found</div>
+    }
+
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-gradient-info text-primary py-3">
+            <h3 class="mb-0">
+                <i class="fas fa-book-open me-2"></i>
+                <i class="bi bi-person-workspace"></i> Assigned Courses
+            </h3>
+        </div>
+        <div class="card-body">
+            @if (Model.AssignedCourses != null && Model.AssignedCourses.Rows.Count > 0)
+            {
+                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+                    @foreach (DataRow row in Model.AssignedCourses.Rows)
+                    {
+                        <div class="col">
+                            <div class="card h-100 shadow-sm hover-shadow">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div>
+                                            <h5 class="card-title mb-0"><i class="bi bi-person-workspace"></i> @row["Course_Code"]</h5>
+                                            <p class="text-muted small mb-0">Course Code</p>
+                                        </div>
+                                    </div>
+                                    <p class="card-text lead">@row["Course_Name"]</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <form method="post">
+                    <button type="submit"
+                            class="btn btn-danger mt-3"
+                            asp-page-handler="Return">
+                        <i class="bi bi-arrow-return-left"></i> Return To Professor Page
+                    </button>
+                </form>
+                
+            }
+            else
+            {
+                <div class="alert alert-warning mb-0">No courses currently assigned</div>
+                <form method="post">
+                    <button type="submit"
+                            class="btn btn-danger mt-3 align-content-center"
+                            asp-page-handler="Return">
+                        <i class="bi bi-arrow-return-left"></i> Return To Professor Page
+                    </button>
+                </form>
+            }
+        </div>
     </div>
-</div>
 </div>

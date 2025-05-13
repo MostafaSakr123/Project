@@ -1,25 +1,48 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Project.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Project.Pages
 {
     public class Register_as_a_VisitorModel : PageModel
     {
-        [BindProperty]
-        [MinLength(3, ErrorMessage = "username must be at least 3 characters long.")]
-        public string username { get; set; }
+        private readonly DB db;
 
         [BindProperty]
-        [MinLength(3, ErrorMessage = "password must be at least 3 characters long.")]
-        public string password { get; set; }
+        public string Username { get; set; }
 
         [BindProperty]
-        [MinLength(3, ErrorMessage = "password must be at least 3 characters long.")]
-        public string Major_of_Interest { get; set; }
-        public void OnGet()
+        public string Password { get; set; }
+
+        public string LoginErrorMessage { get; set; }
+        public string SuccessMessage { get; set; }
+
+        public Register_as_a_VisitorModel(DB db1)
         {
+            db = db1;
+        }
+
+
+        public IActionResult OnPost()
+        {
+            if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
+            {
+                LoginErrorMessage = "Both fields are required.";
+                return Page();
+            }
+
+            db.SetVisitor(Username, Password);
+            SuccessMessage = "Visitor Regisered Successfully.";
+            return Page();  // Fallback
+        }
+        public IActionResult OnPostReturn()
+        {
+            if (string.IsNullOrEmpty(Username) && string.IsNullOrEmpty(Password))
+            {
+                return RedirectToPage("/Login");
+            }
+            return Page();
         }
     }
 }
-

@@ -1,55 +1,81 @@
 ﻿@page
+@using System.Data
 @model Project.Pages.Available_CoursesModel
 @{
+    ViewData["Title"] = "Available Courses";
 }
-<div class="container">
-    <h1 class="mb-4">Courses</h1>
-
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input type="text" class="form-control" placeholder="Search courses...">
-        </div>
-        <div class="col-md-3">
-            <select class="form-select">
-                <option selected>Filter</option>
-                <option>SPC</option>
-                <option>CIE</option>
-                <option>NANENG</option>
-            </select>
-        </div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<div class="container py-5">
+    <div class=" mb-5">
+        <h1 class="display-4 fw-bold text-primary">
+           <i class="bi bi-person-workspace"></i> @ViewData["Title"]
+        </h1>
+        <p class="lead text-muted">All the Availave Courses</p>
     </div>
-
-    <div class="list-group">
-        <a class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">CIE 206</h5>
-                <small>3 credits</small>
+    <form method="get" class="mb-4">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Search by course code..."
+                           name="SearchTerm"
+                           value="@Model.SearchTerm">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-search"></i> Search
+                    </button>
+                </div>
             </div>
-            <p class="mb-1">Brief description of CIE 206</p>
-        </a>
-        
-        <a class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">SPC 315</h5>
-                <small>3 credits</small>
+            <div class="col-md-6">
+                <div class="input-group">
+                    <select class="form-select"
+                            name="SelectedMajor"
+                            onchange="this.form.submit()">
+                        <option value="">All Majors</option>
+                        @foreach (var major in Model.Major)
+                        {
+                            <option value="@major.Code"
+                                    selected="@(major.Code == Model.SelectedMajor ? "selected" : null)">
+                                @major.Name
+                            </option>
+                        }
+                    </select>
+                </div>
             </div>
-            <p class="mb-1">Brief description of SPC 415</p>
-        </a>
-        
-        <a class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">SPC 101</h5>
-                <small>2 credits</small>
-            </div>
-            <p class="mb-1">Brief description of SPC 101</p>
-        </a>
-        
-        <a class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">REE 302</h5>
-                <small>3 credits</small>
-            </div>
-            <p class="mb-1">Brief description of REE 302</p>
-        </a>
-    </div>
+        </div>
+    </form>
+    @if (Model.AvailableCourses.Any())
+    {
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            @foreach (var course in Model.AvailableCourses)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <span class="badge bg-primary me-2">@course.Code</span>
+                                @course.Name
+                            </h5>
+                            <p class="card-text text-muted mb-0">
+                                Major: @course.Major
+                            </p>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <form method="post">
+                                <button type="submit" class="btn btn-outline-primary" asp-page-handler="Info" asp-route-CODE="@course.Code">
+                                    <i class="bi bi-info-circle"></i> View Details
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning" role="alert">
+            No courses found matching your criteria.
+        </div>
+    }
 </div>

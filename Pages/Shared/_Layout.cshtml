@@ -4,6 +4,8 @@
     var role = HttpContextAccessor.HttpContext?.Session.GetString("role");
 }
 
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +22,7 @@
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">Project</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
@@ -35,18 +37,24 @@
                         {
                             <li class="nav-item"><a class="nav-link text-dark" asp-page="/Dashboard">Dashboard</a></li>
                             <li class="nav-item"><a class="nav-link text-dark" asp-page="/Create_Course">Create Course</a></li>
-                            <li class="nav-item"><a class="nav-link text-dark" asp-page="/Edit_Course">Edit Course</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark" asp-page="/Edit_Course">Courses</a></li>
                             <li class="nav-item"><a class="nav-link text-dark" asp-page="/Create_Professor_Account">Create Professor</a></li>
                             <li class="nav-item"><a class="nav-link text-dark" asp-page="/Create_Student_Account">Create Student</a></li>
                             <li class="nav-item"><a class="nav-link text-dark" asp-page="/Make_Announcement">Make Announcement</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark" asp-page="/ListOfProfessors">Professors</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark" asp-page="/ListOfStudents">Students</a></li>
                         }
                         else if (role == "Student")
-                        {
-                            <li class="nav-item"><a class="nav-link text-dark" asp-page="/Student_Home">Home</a></li>
-                            <li class="nav-item"><a class="nav-link text-dark" asp-page="/Student_Timetable">Timetable</a></li>
-                            <li class="nav-item"><a class="nav-link text-dark" asp-page="/Student_Tasks">Tasks</a></li>
-                            <li class="nav-item"><a class="nav-link text-dark" asp-page="/Student_GradeReport">Grades</a></li>
-                        }
+                            {
+                                <li class="nav-item"><a class="nav-link text-dark" asp-page="/Student_Home">Home</a></li>
+                                <li class="nav-item"><a class="nav-link text-dark" asp-page="/Student_Timetable">Timetable</a></li>
+                                <li class="nav-item"><a class="nav-link text-dark" asp-page="/Student_Tasks">Tasks</a></li>
+                                <li class="nav-item"><a class="nav-link text-dark" asp-page="/Student_GradeReport">Grades</a></li>
+                                <li class="nav-item"><a class="nav-link text-dark" asp-page="/Student_Registration">Registration</a></li>
+                                <li class="nav-item"><a class="nav-link text-dark" asp-page="/Drop">Drop</a></li>
+                            }
+
+                        
                         else if (role == "Professor")
                         {
                             <li class="nav-item"><a class="nav-link text-dark" asp-page="/Professor_TimeTable">Timetable</a></li>
@@ -55,12 +63,28 @@
                             <li class="nav-item"><a class="nav-link text-dark" asp-page="/Professor_Attendance">Attendance</a></li>
                             <li class="nav-item"><a class="nav-link text-dark" asp-page="/Professor_Announcement">Announcement</a></li>
                         }
+                        else if (role == "Visitor")
+                        {
+                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/View_Announcements">|    <i class="bi bi-megaphone me-2"></i> View Announcements    |</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/View_Majors">    <i class="bi bi-rocket-takeoff-fill"></i> Available Majors    |</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/Available_Courses">    <i class="bi bi-person-workspace"></i> Available Courses    |</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/Uni_Profs">    <i class="bi bi-briefcase"></i> Professors' Profiles    |</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-page="/Poli_Guide">    <i class="bi bi-journal-bookmark-fill"></i> Politics & Guidelines    |</a></li>
+                        }
 
                         @if (!string.IsNullOrEmpty(role))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/Logout">Logout</a>
+                            <li style="padding-top:8px;" class="nav-item">
+                                <form asp-page="/Logout" method="post" class="d-inline">
+                                    <button type="submit" class="nav-link btn btn-link text-dark border-0 p-0" style="cursor: pointer;">Logout</button>
+                                </form>
                             </li>
+
+
+                        }
+                        else
+                        {
+                            <li class="nav-item"><a class="nav-link text-dark" asp-page="/Register_Visitor">Register as a Visitor</a></li>
                         }
                     </ul>
                 </div>

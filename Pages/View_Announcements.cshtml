@@ -1,29 +1,76 @@
 ﻿@page
 @model Project.Pages.View_AnnouncementsModel
 @{
+    ViewData["Title"] = "Announcements";
 }
 
-<div class="container">
-    <h1 class="mb-4">Announcements</h1>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
-    <div class="announcement-list">
-        <div class="card mb-1 p-4 shadow">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h3 class="mb-0">Prof. Abdelsamea: Important Update</h3>
-            </div>
-            <p class="mb-0">The exam date has been changed to next week.</p>
-        </div>
-        <div class="card mb-1 p-4 shadow">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h3 class="mb-0">Prof. Mohannad: Assignment Deadline</h3>
-            </div>
-            <p class="mb-0">Assignment deadline is postponed till friday.</p>
-        </div>
-        <div class="card mb-1 p-4 shadow">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h3 class="mb-0">Prof. Ashraf: Office Hours</h3>
-            </div>
-            <p class="mb-0">My office hours have changed for this week.</p>
-        </div>
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary">
+            <i class="bi bi-megaphone me-2"></i>@ViewData["Title"]
+        </h1>
+        <p class="lead text-muted">Latest updates and important notices</p>
     </div>
+
+    @if (!ModelState.IsValid)
+    {
+        <div class="alert alert-danger d-flex align-items-center mb-4">
+            <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+            <div>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <p class="mb-0">@error.ErrorMessage</p>
+                }
+            </div>
+        </div>
+    }
+
+    @if (Model.Announcements?.Count > 0)
+    {
+        <div class="row g-4">
+            @foreach (var row in Model.Announcements)
+            {
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-lg border-primary">
+                        <div class="card-header bg-primary bg-opacity-10 border-bottom border-primary">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-person-circle fs-4 text-primary"></i>
+                                <h3 class="card-title mb-0 text-dark">
+                                    @row.Admin_Username.Replace("admin_", "Admin. ")
+                                </h3>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <i class="bi bi-clock-history text-muted"></i>
+                                <span class="text-muted small">
+                                    @row.Time.ToString("yyyy-MM-dd HH:mm")
+                                </span>
+                            </div>
+                            <p class="card-text fs-5 text-dark">
+                                @row.Description
+                            </p>
+                        </div>
+
+                        <div class="card-footer bg-transparent border-top border-primary">
+                            <small class="text-muted">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Announcement ID: #@row.ID
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center py-4">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            No announcements available at the moment
+        </div>
+    }
 </div>

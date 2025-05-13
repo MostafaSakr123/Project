@@ -5,8 +5,16 @@ namespace Project.Pages
 {
     public class Update_CourseModel : PageModel
     {
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            // Session check and redirect 
+            var username = HttpContext.Session.GetString("username");
+            var role = HttpContext.Session.GetString("role");
+            if (string.IsNullOrEmpty(username) || role != "Admin")
+            {
+                return RedirectToPage("/Login");
+            }
+            return Page();
         }
     }
 }

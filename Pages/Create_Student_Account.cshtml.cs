@@ -1,35 +1,85 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Project.Models;
+using System.ComponentModel.DataAnnotations;
+using System.Data.SqlClient;
 
 namespace Project.Pages
 {
     public class Create_Student_AccountModel : PageModel
     {
-
+        private readonly DB _db;
 
         [BindProperty]
-        [MinLength(3, ErrorMessage = "Name must be at least 3 characters long.")]
+        [Required(ErrorMessage = "Name is required")]
+        [MinLength(3, ErrorMessage = "Name must be at least 3 characters")]
         public string Name { get; set; }
 
         [BindProperty]
-        [Range(100000000, 999999999, ErrorMessage = "ID must be 9 digits")]
-        public int ID { get; set; }
-
-
-        [BindProperty]
-        [MinLength(3, ErrorMessage = "username must be at least 3 characters long.")]
-        public string username { get; set; }
-        
+        [Required(ErrorMessage = "Username is required")]
+        [MinLength(3, ErrorMessage = "Username must be at least 3 characters")]
+        public string Username { get; set; }
 
         [BindProperty]
-        [MinLength(3, ErrorMessage = "password must be at least 3 characters long.")]
-        public string password { get; set; }
+        [Required(ErrorMessage = "Password is required")]
+        [MinLength(3, ErrorMessage = "Password must be at least 3 characters")]
+        public string Password { get; set; }
 
         [BindProperty]
-        public string Major { get; set; }
-        public void OnGet()
+        [Required(ErrorMessage = "Student ID is required")]
+        [RegularExpression(@"^\d{9}$", ErrorMessage = "ID must be a 9-digit number")]
+        public string StudentId { get; set; }
+
+        [BindProperty]
+        [Required(ErrorMessage = "Major Code is required")]
+        public string MajorCode { get; set; }
+
+        public string Message { get; set; }
+
+        public Create_Student_AccountModel(DB db)
         {
+            _db = db;
+        }
+
+        public IActionResult OnGet()
+        {
+            // Session check and redirect 
+            var username = HttpContext.Session.GetString("username");
+            var role = HttpContext.Session.GetString("role");
+            if (string.IsNullOrEmpty(username) || role != "Admin")
+            {
+                return RedirectToPage("/Login");
+            }
+            return Page();
+        }
+
+        public IActionResult OnPost()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            try
+            {
+                if (_db.CreateStudentAccount(Username, Password, int.Parse(StudentId), Name, MajorCode))
+                {
+                    Message = "Student account created successfully!";
+                    ModelState.Clear();
+                    return Page();
+                }
+                Message = "Account creation failed (database returned false)";
+            }
+            catch (SqlException ex) when (ex.Number == 2627) // Primary key violation
+            {
+                Message = "Student ID or username already exists";
+            }
+            catch (Exception ex)
+            {
+                Message = $"Error: {ex.Message}";
+            }
+
+            return Page();
         }
     }
 }

@@ -1,34 +1,50 @@
 ﻿@page
 @model Project.Pages.Create_CourseModel
 @{
+    ViewData["Title"] = "Create Course";
 }
 
-<div class="text-center">
-    <h1>Create a course</h1>
+<div class="container">
+    <div class="text-center">
+        <h1>Create New Course</h1>
+    </div>
+
+    <form method="post" class="mt-4">
+        <div class="form-group">
+            <label asp-for="Course_Code">Course Code</label>
+            <input asp-for="Course_Code" class="form-control" placeholder="e.g. CS101" />
+            <span asp-validation-for="Course_Code" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Course_Name">Course Name</label>
+            <input asp-for="Course_Name" class="form-control" placeholder="e.g. Introduction to Programming" />
+            <span asp-validation-for="Course_Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Major_Code">Major Code</label>
+            <input asp-for="Major_Code" class="form-control" placeholder="e.g. CS" />
+            <span asp-validation-for="Major_Code" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Professor_ID">Professor ID</label>
+            <input asp-for="Professor_ID" class="form-control" placeholder="Professor's ID number" />
+            <span asp-validation-for="Professor_ID" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Number_of_Sections">Number of Sections</label>
+            <input asp-for="Number_of_Sections" class="form-control" type="number" min="1" max="8" />
+            <span asp-validation-for="Number_of_Sections" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Course</button>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger mt-3">@Model.ErrorMessage</div>
+        }
+    </form>
 </div>
-
-<form method="post">
-    <label>Course name</label>
-    <input type="text" asp-for="@Model.Course_Name" /> <br />
-    <span asp-validation-for="@Model.Course_Name" class="text-danger">  </span><br /><br />
-
-    <label>Course code:</label>
-    <input type="text" asp-for="@Model.Course_Code" /> <br />
-    <span asp-validation-for="@Model.Course_Code" class="text-danger">  </span><br /><br />
-
-    <label>Major:</label>
-    <input type="text" asp-for="@Model.Major" /> <br />
-    <span asp-validation-for="@Model.Major" class="text-danger">  </span><br /><br />
-
-    <label>Professor name:</label>
-    <input type="text" asp-for="@Model.Professor_Name" /> <br />
-    <span asp-validation-for="@Model.Professor_Name" class="text-danger">  </span><br /><br />
-
-
-    <button type="submit" class="btn btn-primary">Create</button> <br /><br /> <br />
-
-
-
-
-
-</form>

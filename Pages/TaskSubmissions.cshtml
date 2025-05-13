@@ -1,0 +1,46 @@
+﻿@* @page
+@using System.Data
+@model Project.Pages.TaskSubmissionsModel
+@{
+    ViewData["Title"] = "Task Submissions";
+}
+/*
+<div class="card shadow">
+    <div class="card-header bg-primary text-white">
+        <h3><i class="bi bi-list-task me-2"></i>Submissions for @Model.TaskTitle</h3>
+        <div class="text-muted">Course: @Model.CourseCode | Deadline: @Model.Deadline.ToString("g")</div>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Student Name</th>
+                    <th>Submission Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var sub in Model.Submissions)
+                {
+                    <tr>
+                        <td>@sub.StudentId</td>
+                        <td>@sub.StudentName</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(sub.SubmissionLink))
+                            {
+                                <a href="@sub.SubmissionLink" target="_blank" class="text-decoration-none">
+                                    <i class="bi bi-box-arrow-up-right"></i> View Submission
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">No submission yet</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+ *@

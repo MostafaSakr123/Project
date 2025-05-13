@@ -1,0 +1,106 @@
+﻿@page
+@model Project.Pages.Update_SectionModel
+
+<h2>Update Section: @Model.Section.CourseCode - Section @Model.Section.SectionNumber</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<form method="post">
+    <input type="hidden" asp-for="Section.CourseCode" />
+    <input type="hidden" asp-for="Section.SectionNumber" />
+
+    <!-- Day Field -->
+    <div class="form-group">
+        <label>Day</label>
+        <input asp-for="Section.Day" class="form-control" placeholder="e.g., Monday" />
+        <span asp-validation-for="Section.Day" class="text-danger"></span>
+    </div>
+
+    <!-- Start Time Field -->
+    <div class="form-group">
+        <label>Start Time (HH:mm)</label>
+        <input asp-for="Section.StartTime" class="form-control" placeholder="e.g., 09:00" />
+        <span asp-validation-for="Section.StartTime" class="text-danger"></span>
+    </div>
+
+    <!-- End Time Field -->
+    <div class="form-group">
+        <label>End Time (HH:mm)</label>
+        <input asp-for="Section.EndTime" class="form-control" placeholder="e.g., 10:30" />
+        <span asp-validation-for="Section.EndTime" class="text-danger"></span>
+    </div>
+
+    <!-- Professor ID Field -->
+    <div class="form-group">
+        <label>Professor ID</label>
+        <input asp-for="Section.ProfID" class="form-control" placeholder="Professor ID" />
+        <span asp-validation-for="Section.ProfID" class="text-danger"></span>
+    </div>
+
+    <!-- Professor Name Field (Pre-filled and editable) -->
+    <div class="form-group">
+        <label for="ProfessorName">Professor Name</label>
+        <input asp-for="Section.ProfessorName" class="form-control" />
+        <span asp-validation-for="Section.ProfessorName" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+
+<br />
+
+<!-- Student Table -->
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Student Name</th>
+            <th>ID</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Students.Any())
+        {
+            @foreach (var student in Model.Students)
+            {
+                <tr>
+                    <td>@student.Name</td>
+                    <td>@student.ID</td>
+                    <td>
+                        <form method="post" asp-page-handler="DeleteStudent"
+                              asp-route-studentID="@student.ID"
+                              asp-route-courseCode="@Model.Section.CourseCode"
+                              asp-route-sectionNumber="@Model.Section.SectionNumber">
+                            <button type="submit" class="btn btn-danger"
+                                    onclick="return confirm('Remove this student from the section?')">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3">No students enrolled</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<br />
+
+<a asp-page="/Add_Student"
+   asp-route-courseCode="@Model.CourseCode"
+   asp-route-sectionNumber="@Model.SectionNumber"
+   class="btn btn-success">
+    Add Student
+</a>

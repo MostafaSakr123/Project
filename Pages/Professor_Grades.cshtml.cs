@@ -71,7 +71,7 @@ namespace Project.Pages
                 return PageWithError();
             }
 
-            if (!_db.IsStudentEnrolled(studentIdInt, SelectedCourse, semester))
+            if (!_db.IsStudentEnrolled(studentIdInt, SelectedCourse))
             {
                 TempData["ErrorMessage"] = "Student not enrolled in this course";
                 return RedirectToPage();

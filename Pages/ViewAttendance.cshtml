@@ -1,0 +1,67 @@
+﻿@page
+@model Project.Pages.ViewAttendanceModel
+@{
+    ViewData["Title"] = "Attendance Records";
+}
+
+<div class="card shadow mt-4">
+    <div class="card-header bg-primary text-white">
+        <h3><i class="bi bi-calendar-check me-2"></i>Attendance Records</h3>
+    </div>
+    <div class="card-body">
+       
+            <form method="get" class="mb-4">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Select Date</label>
+                        <input type="date" class="form-control"
+                               name="SelectedDate"
+                               value="@Model.SelectedDate.ToString("yyyy-MM-dd")">
+                    </div>
+                    <div class="col-md-6 align-self-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-filter me-2"></i>Filter
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            @if (Model.AttendanceRecords.Any())
+            {
+                @foreach (var group in Model.AttendanceRecords.GroupBy(r => r.CourseCode))
+                {
+                    <div class="mb-4">
+                        <h4 class="text-primary">Course: @group.Key</h4>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Student Name</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var record in group)
+                                {
+                                    <tr>
+                                        <td>@record.StudentId</td>
+                                        <td>@record.StudentName</td>
+                                        <td>@record.Status</td>
+                                        <td>@record.ReportDate.ToString("d")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    No attendance records found.
+                </div>
+            }
+        
+    </div>
+</div>
