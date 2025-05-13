@@ -10,8 +10,6 @@ namespace Project.Models
         public SqlConnection con { get; set; }
         public DB()
         {
-
-           
             string conStr = "Data Source =LAPTOP-L5C16VL4;Initial Catalog=University; Integrated Security=True;TrustServerCertificate=True";
             con = new SqlConnection(conStr);
         }
@@ -61,18 +59,6 @@ namespace Project.Models
                 object studentResult = cmd.ExecuteScalar();
                 if (studentResult != null)
                     return Tuple.Create("Student", studentResult.ToString());
-
-                // Check Visitor
-                cmd.CommandText = @"SELECT v.username
-                            FROM Visitor v  
-                            WHERE v.Username = @username AND v.Password = @password";
-                cmd.Parameters.Clear();
-                cmd.Parameters.AddWithValue("@username", username);
-                cmd.Parameters.AddWithValue("@password", password);
-
-                object visitorResult = cmd.ExecuteScalar();
-                if (visitorResult != null)
-                    return Tuple.Create("Visitor", visitorResult.ToString());
             }
 
             return Tuple.Create("Invalid", "");
@@ -98,34 +84,7 @@ namespace Project.Models
 
             return name;
         }
-        public void SetVisitor(string username, string password)
-        {
-            // Validate inputs
 
-
-            using (SqlCommand cmd = new SqlCommand())
-            {
-                cmd.Connection = con;
-
-                // Use parameterized query to prevent SQL injection
-                cmd.CommandText = "INSERT INTO Visitor (Username, Password) VALUES (@Username, @Password)";
-
-                // Add parameters
-                cmd.Parameters.AddWithValue("@Username", username);
-                cmd.Parameters.AddWithValue("@Password", password);
-
-
-                // Open connection if not already open
-                if (con.State != ConnectionState.Open)
-                    con.Open();
-
-                // Execute the query
-                cmd.ExecuteNonQuery();
-            }
-        }
-        public DataTable ExecuteReader(string query)
-        {
-            using (SqlCommand cmd = new SqlCommand(query, con))
 
         public List<Student_GradeReport> GetStudentGrades(int studentId)
         {
@@ -217,15 +176,9 @@ namespace Project.Models
               LEFT JOIN Sections s ON c.Course_Code = s.Course_Code
               LEFT JOIN Professor p ON s.Prof_ID = p.ID
               ORDER BY c.Course_Code, s.Section_Number", con))
-
             {
                 if (con.State != ConnectionState.Open)
                     con.Open();
-
-
-                DataTable dt = new DataTable();
-                dt.Load(cmd.ExecuteReader());
-                return dt;
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -847,11 +800,9 @@ namespace Project.Models
 
                 cmd.ExecuteNonQuery();
                 con.Close();
-
             }
         }
 
     }
-    
 }
 

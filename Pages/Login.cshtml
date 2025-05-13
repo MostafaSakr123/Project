@@ -13,11 +13,11 @@
                     <form method="post">
                         <div class="form-group">
                             <label for="Username">Username</label>
-                            <input type="text" class="form-control" id="Username" name="Username" />
+                            <input type="text" class="form-control" id="Username" name="Username" required />
                         </div>
                         <div class="form-group">
                             <label for="Password">Password</label>
-                            <input type="password" class="form-control" id="Password" name="Password" />
+                            <input type="password" class="form-control" id="Password" name="Password" required />
                         </div>
 
                         @if (Model.LoginErrorMessage != null)
@@ -28,7 +28,6 @@
                         }
 
                         <button type="submit" class="btn btn-primary mt-3">Login</button>
-                        <button type="submit" class="btn btn-success mt-3" asp-page-handler="Visitor">Register As a Visitor</button>
                     </form>
                 </div>
             </div>
