@@ -18,21 +18,20 @@ namespace Project.Pages
             _db = db;
         }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            CoursesPerMajor = await _db.GetCourseCountByMajor();
-            StudentsPerCourse = await _db.GetStudentCountByCourse();
-        }
-
-        public IActionResult OnGet()
-        {
-            // Session check and redirect 
+            // Session check and redirect
             var username = HttpContext.Session.GetString("username");
             var role = HttpContext.Session.GetString("role");
             if (string.IsNullOrEmpty(username) || role != "Admin")
             {
                 return RedirectToPage("/Login");
             }
+
+            // Load dashboard data
+            CoursesPerMajor = await _db.GetCourseCountByMajor();
+            StudentsPerCourse = await _db.GetStudentCountByCourse();
+
             return Page();
         }
     }
