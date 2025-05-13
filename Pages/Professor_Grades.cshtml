@@ -1,5 +1,4 @@
 ﻿@page
-@using System.Data
 @model Project.Pages.Professor_GradesModel
 @{
     ViewData["Title"] = "Grade Management";
@@ -12,28 +11,30 @@
     <div class="card-body">
         @if (TempData["SuccessMessage"] != null)
         {
-            <div class="alert alert-success alert-dismissible fade show mb-4">
+                <div class="alert alert-success alert-dismissible fade show mb-4">
                 @TempData["SuccessMessage"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
         }
 
-        <form method="post" class="needs-validation" novalidate>
+        <form method="post" id="gradeForm" class="needs-validation" novalidate>
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label class="form-label">Course</label>
+                    <label class="form-label">
+                        Course <span class="text-danger">*</span>
+                    </label>
                     <select class="form-select" asp-for="SelectedCourse" required>
                         <option value="">-- Select Course --</option>
-                        @foreach (DataRow row in Model.ProfessorCourses.Rows)
-                        {
-                            <option value="@row["Course_Code"]">@row["Course_Code"]</option>
-                        }
+                        <option value="CIE206">CIE 206</option>
+                        <option value="SPC415">SPC 415</option>
                     </select>
                     <span asp-validation-for="SelectedCourse" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Student ID</label>
-                    <input type="text" class="form-control" asp-for="StudentId"
+                    <label class="form-label">
+                        Student ID <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" class="form-control" asp-for="StudentId" 
                            pattern="[0-9]{9}" title="Must be exactly 9 digits" required>
                     <span asp-validation-for="StudentId" class="text-danger"></span>
                 </div>
@@ -53,7 +54,7 @@
                             <tr>
                                 <td>Course Work (60%)</td>
                                 <td>
-                                    <input type="number" class="form-control"
+                                    <input type="number" class="form-control" 
                                            asp-for="AssignmentScore" min="0" max="100" required>
                                     <span asp-validation-for="AssignmentScore" class="text-danger"></span>
                                 </td>
@@ -61,7 +62,7 @@
                             <tr>
                                 <td>Exams (40%)</td>
                                 <td>
-                                    <input type="number" class="form-control"
+                                    <input type="number" class="form-control" 
                                            asp-for="ExamScore" min="0" max="100" required>
                                     <span asp-validation-for="ExamScore" class="text-danger"></span>
                                 </td>
@@ -71,38 +72,26 @@
                 </div>
             </div>
 
-            @if (!string.IsNullOrEmpty(Model.CalculatedGrade))
-            {
-                <div class="alert alert-info mb-4">
-                    <strong>Calculated Grade:</strong> @Model.CalculatedGrade
-                </div>
-            }
+            <div class="alert alert-info" id="gradeResult">
+                @if (Model.GradeCalculated)
+                {
+                        <strong>Calculated Grade:</strong> @Model.CalculateGrade()
+                }
+                else
+                {
+                        <span>Click "Calculate Grade" to see results</span>
+                }
+            </div>
 
             <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-secondary" asp-page-handler="Calculate">
+                <button type="button" class="btn btn-secondary" 
+                        onclick="document.getElementById('gradeForm').action='?handler=Calculate'; document.getElementById('gradeForm').requestSubmit()">
                     Calculate Grade
                 </button>
-                <button type="submit" class="btn btn-primary" asp-page-handler="Submit">
+                <button type="submit" class="btn btn-primary">
                     Submit Grade
                 </button>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label class="form-label">Semester</label>
-                    <select class="form-select" asp-for="Semester" required>
-                        <option value="">-- Select Semester --</option>
-                        <option>Fall 2024</option>
-                        <option>Spring 2024</option>
-                        <option>Fall 2023</option>
-                        <option>Summer 2023</option>
-                    </select>
-                    <span asp-validation-for="Semester" class="text-danger"></span>
-                </div>
             </div>
         </form>
     </div>
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
